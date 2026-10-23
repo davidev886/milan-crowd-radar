@@ -1,0 +1,63 @@
+name: Telegram brief
+
+# GitHub runs schedules in UTC. Each send is listed twice (summer and winter
+# time); the script only sends from the entry that lands at the right hour in
+# Milan, so you get one message at ~07:07 and one at ~19:07 local time.
+# (Scheduled runs can start a few minutes late when GitHub is busy.)
+on:
+  schedule:
+    - cron: "7 5 * * *"    # 07:07 Milan in summer (CEST) - morning brief
+    - cron: "7 6 * * *"    # 07:07 Milan in winter (CET)  - morning brief
+    - cron: "7 17 * * *"   # 19:07 Milan in summer - tomorrow preview
+    - cron: "7 18 * * *"   # 19:07 Milan in winter - tomorrow preview
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "What to send"
+        type: choice
+        options: [morning, evening, find-chat-id, dry-run]
+        default: morning
+
+permissions:
+  contents: read
+
+concurrency:
+  group: telegram-brief
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Send brief
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          DASHBOARD_URL: ${{ vars.DASHBOARD_URL }}
+          EVENT_NAME: ${{ github.event_name }}
+          SCHEDULE: ${{ github.event.schedule }}
+          MANUAL_MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          if [ -z "${DASHBOARD_URL}" ]; then unset DASHBOARD_URL; fi
+          if [ "$EVENT_NAME" = "schedule" ]; then
+            case "$SCHEDULE" in
+              "7 5 * * *")  python bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 5 ;;
+              "7 6 * * *")  python bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 6 ;;
+              "7 17 * * *") python bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 17 ;;
+              "7 18 * * *") python bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 18 ;;
+              *) echo "Unknown schedule: $SCHEDULE"; exit 1 ;;
+            esac
+          else
+            case "$MANUAL_MODE" in
+              dry-run) python bot/send_brief.py --mode morning --dry-run ;;
+              *)       python bot/send_brief.py --mode "$MANUAL_MODE" ;;
+            esac
+          fi
