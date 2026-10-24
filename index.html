@@ -108,6 +108,9 @@
   .headline { font-size: 1.15rem; font-weight: 550; margin: 0 0 10px; }
   .kv { margin: 0 0 6px; color: var(--ink-2); font-size: 0.95rem; }
   .kv b { color: var(--ink); font-weight: 600; margin-right: 4px; }
+  .split { margin: 6px 0 0; font-size: 0.85rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
+  .day .split, .detail-head + .split { margin: 0 0 4px; }
+  .mode { margin-bottom: 14px; }
   .stale { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted); }
 
   /* event item */
@@ -220,13 +223,18 @@
 
   <section aria-labelledby="h-next">
     <h2 id="h-next">Coming up</h2>
-    <p class="note">Pressure runs 0–5: the highest taxi or Linate impact among the day's events, plus one when three or more overlap.</p>
+    <p class="note">Pressure runs 0–5, scored for taxis and for Linate: the highest impact among the day's events, plus one when three or more overlap. A day's score is the higher of the two.</p>
     <div id="days" class="days"><div class="skeleton"></div></div>
   </section>
 
   <section aria-labelledby="h-cal" class="card">
     <h2 id="h-cal">Pressure calendar</h2>
-    <p class="note">Tap a day to see what's on. The number in each day is its pressure score; the stronger the colour, the more pressure on taxis and Linate.</p>
+    <p class="note">Tap a day to see what's on. The number in each day is its pressure score; the stronger the colour, the more pressure. Pick Taxi or Linate to see just one.</p>
+    <div id="mode" class="chips mode" role="group" aria-label="Show pressure for">
+      <button type="button" class="chip" data-mode="both" aria-pressed="true">Taxi + Linate</button>
+      <button type="button" class="chip" data-mode="taxi" aria-pressed="false">Taxi</button>
+      <button type="button" class="chip" data-mode="linate" aria-pressed="false">Linate</button>
+    </div>
     <div class="cal">
       <div>
         <div class="heat-wrap">
@@ -271,10 +279,12 @@
 (() => {
   'use strict';
   const LABELS = ['Quiet', 'Low', 'Moderate', 'Busy', 'High', 'Extreme'];
+  const MODES = { both: ['taxi', 'linate'], taxi: ['taxi'], linate: ['linate'] }; // calendar switch
+  const MODE_WORD = { both: '', taxi: 'taxi ', linate: 'Linate ' };
   const DAY_MS = 864e5;
   const $ = (id) => document.getElementById(id);
   const oneColumn = matchMedia('(max-width: 820px)'), reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const state = { events: [], brief: new Map(), today: '', picked: '', q: '', cat: 'All', sort: 'date', past: false, all: false };
+  const state = { events: [], brief: new Map(), today: '', picked: '', mode: 'both', q: '', cat: 'All', sort: 'date', past: false, all: false };
 
   // ---------- dates (all in Milan time, as YYYY-MM-DD strings) ----------
   const romeToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
@@ -290,7 +300,8 @@
   const eventsOn = (day) => state.events
     .filter((e) => e.start <= day && day <= e.end)
     .sort((a, b) => Math.max(num(b.taxi), num(b.linate)) - Math.max(num(a.taxi), num(a.linate)));
-  const pressure = (on) => on.length ? Math.min(5, Math.max(...on.map((e) => Math.max(num(e.taxi), num(e.linate)))) + (on.length >= 3 ? 1 : 0)) : 0;
+  // default keys = the shared rule (same as bot/send_brief.py); one key scores taxi or Linate alone
+  const pressure = (on, keys = MODES.both) => on.length ? Math.min(5, Math.max(...on.map((e) => Math.max(...keys.map((k) => num(e[k]))))) + (on.length >= 3 ? 1 : 0)) : 0;
   const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//i.test(u) ? u : null);
 
   // ---------- tiny DOM builder (text only, never innerHTML for data) ----------
@@ -307,6 +318,7 @@
     return n;
   }
   const level = (l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l}/5 · ${LABELS[l]}`);
+  const split = (on) => on.length ? h('p', { class: 'split' }, `Taxi ${pressure(on, MODES.taxi)}/5 · Linate ${pressure(on, MODES.linate)}/5`) : null;
   const meter = (v) => h('span', { class: 'meter', 'aria-hidden': 'true' }, [1, 2, 3, 4, 5].map((i) => h('i', { class: i <= v ? 'on' : null })));
   const evName = (e) => { const u = safeUrl(e.source); return u ? h('a', { href: u, target: '_blank', rel: 'noopener noreferrer' }, e.name, h('span', { class: 'sr-only' }, ' (source, opens in a new tab)')) : e.name; };
   function eventItem(e) {
@@ -326,7 +338,8 @@
     const left = h('div', null,
       h('div', { class: 'today-date' }, `Today · ${fmtLong(d)}`),
       h('div', { class: 'hero' }, h('span', { class: 'hero-n' }, String(l)), h('span', { class: 'hero-of' }, '/5')),
-      h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), LABELS[l] + ' pressure'));
+      h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), LABELS[l] + ' pressure'),
+      split(on));
     const right = h('div', null,
       !b && state.brief.size ? h('p', { class: 'stale' }, "Today's written brief hasn't been refreshed yet; the events below are current.") : null,
       h('p', { class: 'headline' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed today.')),
@@ -344,6 +357,7 @@
       const d = add(state.today, i), on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
       cards.push(h('article', { class: 'card day' },
         h('div', { class: 'day-top' }, h('h3', { class: 'day-date' }, fmtDay(d), i === 1 ? h('small', null, ' tomorrow') : null), level(l)),
+        split(on),
         h('p', { class: 'day-head' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed.')),
         b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
         b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
@@ -366,7 +380,7 @@
     const nodes = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((w) => h('div', { class: 'dow', 'aria-hidden': 'true' }, w));
     let first = true;
     for (let d = start; d <= end; d = add(d, 1)) {
-      const on = eventsOn(d), l = pressure(on), dt = toDate(d);
+      const on = eventsOn(d), l = pressure(on, MODES[state.mode]), dt = toDate(d);
       const showMonth = first || dt.getUTCDate() === 1;
       const label = h('span', { class: 'd' }, String(dt.getUTCDate()),
         showMonth ? h('small', null, dt.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' })) : null);
@@ -374,7 +388,7 @@
       const names = on.map((e) => e.name).join(' · ');
       const cell = h('button', {
         type: 'button', class: ['cell', d < state.today && 'past', d === state.today && 'is-today', d === state.picked && 'picked'].filter(Boolean).join(' '),
-        dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} pressure, ${l} of 5${names ? '. ' + names : ''}`,
+        dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} ${MODE_WORD[state.mode]}pressure, ${l} of 5${names ? '. ' + names : ''}`,
         'aria-pressed': d === state.picked ? 'true' : 'false', 'aria-current': d === state.today ? 'date' : null,
         tabindex: d === state.picked ? '0' : '-1', // roving tabindex: one Tab stop, arrows move (see keydown below)
       }, label, h('span', { class: 'sc' }, l ? String(l) : ''));
@@ -413,12 +427,24 @@
     ev.preventDefault(); cell.tabIndex = -1; next.tabIndex = 0; next.focus();
   });
   function renderDetail() {
-    const d = state.picked, on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
+    const d = state.picked, on = eventsOn(d), l = pressure(on, MODES[state.mode]), b = state.brief.get(d);
     $('detail').replaceChildren(
       h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + (d === state.today ? ' · today' : '')), level(l)),
+      split(on) || '',
       b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
   }
+
+  // calendar switch: both / taxi / Linate, remembered per viewer
+  try { const m = localStorage.getItem('mode'); if (Object.hasOwn(MODES, m)) state.mode = m; } catch { /* storage blocked: keep default */ }
+  function renderMode() { for (const b of $('mode').children) b.setAttribute('aria-pressed', String(b.dataset.mode === state.mode)); }
+  $('mode').addEventListener('click', (ev) => {
+    const m = ev.target.closest('[data-mode]')?.dataset.mode;
+    if (!m || m === state.mode) return;
+    state.mode = m;
+    try { localStorage.setItem('mode', m); } catch { /* ignore */ }
+    renderMode(); renderHeat(); renderDetail();
+  });
 
   // ---------- all events ----------
   function renderChips() {
@@ -467,7 +493,7 @@
   function renderAll() {
     state.today = romeToday();
     if (!state.picked || state.picked < add(state.today, -dow(state.today))) state.picked = state.today;
-    renderToday(); renderDays(); renderLegend(); renderHeat(); renderDetail(); renderChips(); renderRows();
+    renderToday(); renderDays(); renderLegend(); renderMode(); renderHeat(); renderDetail(); renderChips(); renderRows();
   }
   async function load() {
     try {
