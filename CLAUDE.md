@@ -81,7 +81,8 @@ implemented in `index.html` (`pressure()`) and `bot/send_brief.py`
 optional `keys` list (`['taxi']` or `['linate']`) for the per-mode scores and
 the calendar's Taxi / Linate switch; its default call is the shared rule above
 and must keep matching the bot. The page's `overlap()` returns the reason for the +1, which `driver()` (the
-"Top event: … · +1 for 3 big events at once" line) shows, so change them together. The page's "Refreshed…" line is derived from the
+"Top event: … · +1 for 3 big events at once" line) shows, so change them together. A third copy lives in the private
+dashboard's page (see "Outside this repo"). The page's "Refreshed…" line is derived from the
 first `briefing.json` date (the routine's run day), so keep that file starting today.
 
 ## Run and test locally
@@ -132,6 +133,10 @@ must close on its own line.
   from the CLI with `/schedule list`, `/schedule update`, `/schedule run`, or at
   claude.ai/code/routines. It reads yesterday's data from the dashboard, not
   from this repo.
+- **Private dashboard** (link in the routine's prompt): its page, `files/index.html` in
+  the dashboard's store, computes pressure itself in `dash.calc('days')` and states the
+  rule in two notes. Update it with the `ArtifactData` tool whenever the rule changes;
+  the routine is told not to touch it.
 - **GitHub Pages**: Settings → Pages → Deploy from a branch → `main` / root.
 - **GitHub Actions minutes**: free and unlimited because the repo is public.
 
