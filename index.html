@@ -138,6 +138,9 @@
   .day-body { grid-area: body; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .day-head { margin: 0; }
   .day .kv { font-size: 0.85rem; margin: 0; }
+  .day details .kv { margin-top: 6px; }
+  .day summary { width: fit-content; padding: 12px 0; margin: -8px 0; font-size: 0.85rem; color: var(--ink-2); cursor: pointer; }
+  .day summary:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; border-radius: 4px; }
   @media (min-width: 720px) {
     .day { grid-template-columns: 7.5rem 10.5rem minmax(0, 1fr); grid-template-areas: "date score body"; gap: 6px 24px; }
     .day-score { text-align: left; }
@@ -292,6 +295,7 @@
   const MODE_WORD = { both: '', taxi: 'taxi ', linate: 'Linate ' };
   const DAY_MS = 864e5;
   const $ = (id) => document.getElementById(id);
+  const wide = matchMedia('(min-width: 720px)'); // same breakpoint as the .day agenda columns
   const oneColumn = matchMedia('(max-width: 820px)'), reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const state = { events: [], brief: new Map(), today: '', picked: '', mode: 'both', q: '', cat: 'All', sort: 'date', past: false, all: false };
 
@@ -360,6 +364,13 @@
   }
 
   // ---------- coming up (next 7 days) ----------
+  // brief lines: shown on wide screens; folded on phones (tomorrow's left open)
+  function dayNotes(b, open) {
+    const kv = [['Taxi', b && b.taxi], ['Linate', b && b.linate], ['Weather', b && b.weather]].filter(([, v]) => v);
+    const lines = kv.map(([k, v]) => h('p', { class: 'kv' }, h('b', null, k), v));
+    if (!lines.length) return null;
+    return wide.matches ? lines : h('details', { open }, h('summary', null, kv.map(([k]) => k).join(' · ')), lines);
+  }
   function renderDays() {
     const cards = [];
     for (let i = 1; i <= 7; i++) {
@@ -369,9 +380,7 @@
         h('div', { class: 'day-score' }, level(l), split(on)),
         h('div', { class: 'day-body' },
           h('p', { class: 'day-head' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed.')),
-          b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
-          b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
-          b && b.weather ? h('p', { class: 'kv' }, h('b', null, 'Weather'), b.weather) : null)));
+          dayNotes(b, i === 1))));
     }
     $('days').replaceChildren(...cards);
   }
