@@ -258,7 +258,7 @@
 
   <section aria-labelledby="h-cal" class="card">
     <h2 id="h-cal">Pressure calendar</h2>
-    <p class="note">Select a day to see what's on. The number in each day is its pressure score; the stronger the colour, the more pressure. Pick Taxi or Linate to see just one.</p>
+    <p class="note">Select a day to see what's on, and select it again to close it. The number in each day is its pressure score; the stronger the colour, the more pressure. Pick Taxi or Linate to see just one.</p>
     <div id="mode" class="chips mode" role="group" aria-label="Show pressure for">
       <button type="button" class="chip" data-mode="both" aria-pressed="true">Taxi + Linate</button>
       <button type="button" class="chip" data-mode="taxi" aria-pressed="false">Taxi</button>
@@ -315,7 +315,7 @@
   const $ = (id) => document.getElementById(id);
   const wide = matchMedia('(min-width: 720px)'); // same breakpoint as the .day agenda columns
   const oneColumn = matchMedia('(max-width: 820px)'), reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
-  const state = { events: [], brief: new Map(), today: '', picked: '', mode: 'both', q: '', cat: 'All', sort: 'date', past: false, all: false };
+  const state = { events: [], brief: new Map(), today: '', picked: '', open: true, mode: 'both', q: '', cat: 'All', sort: 'date', past: false, all: false };
 
   // ---------- dates (all in Milan time, as YYYY-MM-DD strings) ----------
   const romeToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
@@ -449,11 +449,11 @@
       const label = h('span', { class: 'd' }, String(dt.getUTCDate()),
         showMonth ? h('small', null, dt.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' })) : null);
       first = false;
-      const names = on.map((e) => e.name).join(' · ');
+      const names = on.map((e) => e.name).join(' · '), picked = state.open && d === state.picked;
       const cell = h('button', {
-        type: 'button', class: ['cell', d < state.today && 'past', d === state.today && 'is-today', d === state.picked && 'picked'].filter(Boolean).join(' '),
+        type: 'button', class: ['cell', d < state.today && 'past', d === state.today && 'is-today', picked && 'picked'].filter(Boolean).join(' '),
         dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} pressure${MODE_FOR[state.mode]}, ${l} of 5${names ? '. ' + names : ''}`,
-        'aria-pressed': d === state.picked ? 'true' : 'false', 'aria-current': d === state.today ? 'date' : null,
+        'aria-pressed': String(picked), 'aria-current': d === state.today ? 'date' : null,
         tabindex: d === state.picked ? '0' : '-1', // roving tabindex: one Tab stop, arrows move (see keydown below)
       }, label, h('span', { class: 'sc' }, l ? String(l) : ''));
       const show = () => {
@@ -468,6 +468,7 @@
       cell.addEventListener('mouseleave', hide);
       cell.addEventListener('click', () => {
         hide();
+        if (state.open && d === state.picked) return pick(d, false); // the open day again: close it
         const before = cell.getBoundingClientRect().top;
         pick(d);
         if (!oneColumn.matches) return;
@@ -485,14 +486,15 @@
     for (let i = 1; i <= 7; i++) { const d = add(state.today, i), l = pressure(eventsOn(d), MODES[state.mode]); if (l > top) { best = d; top = l; } }
     return best;
   }
-  // update the picked cell in place (no rebuild), so keyboard focus stays where it is
-  function pick(d) {
-    state.picked = d;
+  // update the picked cell in place (no rebuild), so keyboard focus stays where it is;
+  // a closed day keeps the Tab stop but loses the ring and the detail
+  function pick(d, open = true) {
+    state.picked = d; state.open = open;
     for (const c of $('heat').querySelectorAll('.cell')) {
       const on = c.dataset.d === d;
-      c.classList.toggle('picked', on); c.setAttribute('aria-pressed', String(on)); c.tabIndex = on ? 0 : -1;
+      c.classList.toggle('picked', on && open); c.setAttribute('aria-pressed', String(on && open)); c.tabIndex = on ? 0 : -1;
     }
-    renderDetail(true);
+    renderDetail(open);
   }
   $('heat').addEventListener('keydown', (ev) => {
     const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[ev.key], cell = ev.target.closest('.cell');
@@ -510,6 +512,9 @@
   oneColumn.addEventListener('change', placeDetail);
   // announce: only after a pick or a mode switch, and only the short summary (not the whole detail)
   function renderDetail(announce) {
+    detailEl.hidden = !state.open;
+    placeDetail(); // even when closed: renderHeat may have just dropped it from the grid
+    if (!state.open) return;
     const d = state.picked, on = eventsOn(d), l = pressure(on, MODES[state.mode]), b = state.brief.get(d);
     const note = d === state.today ? ' · today' : l && d === peakDay() ? " · the week's peak" : '';
     detailEl.replaceChildren(
@@ -518,7 +523,6 @@
       driver(on, MODES[state.mode], b && b.headline) || '',
       b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
-    placeDetail();
     if (announce) $('detail-live').textContent = `${fmtLong(d)}: ${LABELS[l]} pressure${MODE_FOR[state.mode]}, ${l} of 5`;
   }
 
