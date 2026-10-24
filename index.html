@@ -110,6 +110,8 @@
   .kv b { color: var(--ink); font-weight: 600; margin-right: 4px; }
   .split { margin: 6px 0 0; font-size: 0.85rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
   .detail-head + .split { margin: 0 0 4px; }
+  .why { margin: 4px 0 0; font-size: 0.8rem; color: var(--muted); }
+  #detail .why { margin: 0 0 8px; }
   .mode { margin-bottom: 14px; }
   .stale { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted); }
 
@@ -128,13 +130,14 @@
   /* coming up: one agenda list, a row per day (date · score · what's on) */
   .days { padding-block: 2px; }
   .days:empty { display: none; }
-  .day { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "date score" "body body"; gap: 6px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .day { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "date score" "why why" "body body"; gap: 6px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
   .day:first-child { border-top: 0; padding-top: 0; }
   .day:last-child { padding-bottom: 0; }
   .day-date { grid-area: date; font-weight: 600; font-size: inherit; line-height: inherit; }
   .day-date small { display: block; font-weight: 400; font-size: 0.8rem; color: var(--muted); }
   .day-score { grid-area: score; text-align: right; }
   .day-score .split { margin: 2px 0 0; }
+  .day .why { grid-area: why; margin: 0; }
   .day-body { grid-area: body; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .day-head { margin: 0; }
   .day .kv { font-size: 0.85rem; margin: 0; }
@@ -142,7 +145,8 @@
   .day summary { width: fit-content; padding: 12px 0; margin: -8px 0; font-size: 0.85rem; color: var(--ink-2); cursor: pointer; }
   .day summary:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; border-radius: 4px; }
   @media (min-width: 720px) {
-    .day { grid-template-columns: 7.5rem 10.5rem minmax(0, 1fr); grid-template-areas: "date score body"; gap: 6px 24px; }
+    /* the driver line sits under the score; row 2 takes any extra height so it stays close */
+    .day { grid-template-columns: 7.5rem 10.5rem minmax(0, 1fr); grid-template-areas: "date score body" "date why body"; grid-template-rows: auto 1fr; gap: 6px 24px; }
     .day-score { text-align: left; }
   }
 
@@ -343,6 +347,15 @@
   }
   const level = (l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l}/5 · ${LABELS[l]}`);
   const split = (on) => on.length ? h('p', { class: 'split' }, `Taxi ${pressure(on, MODES.taxi)}/5 · Linate ${pressure(on, MODES.linate)}/5`) : null;
+  // what sets the score: the top event, plus the overlap bonus unless the top is already 5 (same sum as pressure())
+  function driver(on, keys = MODES.both) {
+    if (!on.length) return null;
+    const best = (e) => Math.max(...keys.map((k) => num(e[k])));
+    const top = on.reduce((a, e) => (best(e) > best(a) ? e : a));
+    const k = keys.reduce((a, k) => (num(top[k]) > num(top[a]) ? k : a), keys[0]);
+    const bonus = on.length >= 3 && best(top) < 5 ? ` · +1 for ${on.length} overlapping events` : '';
+    return h('p', { class: 'why' }, `Top event: ${top.name}, ${k === 'taxi' ? 'taxi' : 'Linate'} ${best(top)}${bonus}`);
+  }
   const meter = (v) => h('span', { class: 'meter', 'aria-hidden': 'true' }, [1, 2, 3, 4, 5].map((i) => h('i', { class: i <= v ? 'on' : null })));
   const evName = (e) => { const u = safeUrl(e.source); return u ? h('a', { href: u, target: '_blank', rel: 'noopener noreferrer' }, e.name, h('span', { class: 'sr-only' }, ' (source, opens in a new tab)')) : e.name; };
   function eventItem(e) {
@@ -363,7 +376,7 @@
       h('div', { class: 'today-date' }, `Today · ${fmtLong(d)}`),
       h('div', { class: 'hero' }, h('span', { class: 'hero-n' }, String(l)), h('span', { class: 'hero-of' }, '/5')),
       h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), LABELS[l] + ' pressure'),
-      split(on));
+      split(on), driver(on));
     const right = h('div', null,
       state.briefFailed ? h('p', { class: 'stale' }, "Couldn't load today's written brief; the events below loaded fine.")
         : !b && state.brief.size ? h('p', { class: 'stale' }, "Today's written brief isn't in yet; the events below are current.") : null,
@@ -390,6 +403,7 @@
       cards.push(h('article', { class: 'day' },
         h('h3', { class: 'day-date' }, fmtDay(d), i === 1 ? h('small', null, ' tomorrow') : null),
         h('div', { class: 'day-score' }, level(l), split(on)),
+        driver(on),
         h('div', { class: 'day-body' },
           h('p', { class: 'day-head' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed.')),
           dayNotes(b, i === 1))));
@@ -469,6 +483,7 @@
     $('detail').replaceChildren(
       h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + note), level(l)),
       split(on) || '',
+      driver(on, MODES[state.mode]) || '',
       b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
   }
