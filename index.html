@@ -488,6 +488,7 @@
   // one column (same breakpoint as .cal): the detail opens under the picked week, so a tap doesn't send the grid off screen
   const detailEl = $('detail'), detailHome = detailEl.parentElement;
   function placeDetail() {
+    if (!state.picked) return; // nothing loaded yet (or the load failed)
     const sun = oneColumn.matches && $('heat').querySelector(`.cell[data-d="${add(state.picked, 6 - dow(state.picked))}"]`);
     if (sun) sun.after(detailEl); else detailHome.append(detailEl);
   }
