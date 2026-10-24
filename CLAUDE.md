@@ -79,7 +79,7 @@ implemented in `index.html` (`pressure()`) and `bot/send_brief.py`
 (`pressure()`); keep them identical. The page's `pressure()` also takes an
 optional `keys` list (`['taxi']` or `['linate']`) for the per-mode scores and
 the calendar's Taxi / Linate switch; its default call is the shared rule above
-and must keep matching the bot. The page's "Refreshed…" line is derived from the
+and must keep matching the bot. The page's `driver()` (the "Top event: … · +1 for N overlapping events" line) restates the same sum, so change it with `pressure()`. The page's "Refreshed…" line is derived from the
 first `briefing.json` date (the routine's run day), so keep that file starting today.
 
 ## Run and test locally
