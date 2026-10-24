@@ -209,7 +209,9 @@
   }
   .more { margin-top: 14px; }
   .empty { color: var(--muted); padding: 12px 0; }
-  .error { color: var(--ink-2); }
+  .error { color: var(--ink-2); margin: 0 0 12px; }
+  .retry { margin-left: 6px; }
+  .error + .retry { margin-left: 0; }
 
   footer { color: var(--muted); font-size: 0.85rem; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 18px; }
   footer p { margin: 0 0 8px; max-width: 75ch; }
@@ -354,7 +356,8 @@
       h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), LABELS[l] + ' pressure'),
       split(on));
     const right = h('div', null,
-      !b && state.brief.size ? h('p', { class: 'stale' }, "Today's written brief hasn't been refreshed yet; the events below are current.") : null,
+      state.briefFailed ? h('p', { class: 'stale' }, "Couldn't load today's written brief; the events below loaded fine.")
+        : !b && state.brief.size ? h('p', { class: 'stale' }, "Today's written brief isn't in yet; the events below are current.") : null,
       h('p', { class: 'headline' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed today.')),
       b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
       b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
@@ -511,10 +514,28 @@
   $('more').addEventListener('click', () => { state.all = true; renderRows(); });
 
   // ---------- load ----------
+  // network first; if that fails, the browser's own cached copy (flaky connections, home-screen app)
   async function getJson(path) {
-    const res = await fetch(path, { cache: 'no-cache' });
+    let res, cached = false;
+    try { res = await fetch(path, { cache: 'no-cache' }); } catch { /* offline: try the cache */ }
+    if (!res || !res.ok) { res = await fetch(path, { cache: 'force-cache' }); cached = true; }
     if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
-    return { data: await res.json(), modified: res.headers.get('last-modified') };
+    return { data: await res.json(), cached };
+  }
+  const retryButton = () => h('button', {
+    type: 'button', class: 'chip retry',
+    onclick: (ev) => { ev.currentTarget.disabled = true; ev.currentTarget.textContent = 'Trying…'; load(); },
+  }, 'Try again');
+  const setStatus = (text, retry) => $('updated').replaceChildren(text, retry ? retryButton() : '');
+  const showSections = (on) => { for (const id of ['days', 'heat', 'rows']) $(id).closest('section').hidden = !on; };
+  // the routine writes the brief from its run day onwards, so the first brief date is when the data was refreshed
+  function freshness(cached) {
+    const first = [...state.brief.keys()].sort()[0];
+    if (cached) return `Couldn't refresh, so this is the copy saved on this device${first ? ` (from ${fmtDay(first)})` : ''}.`;
+    if (!first) return 'Refreshed every morning around 06:45 Milan time.';
+    return first >= state.today
+      ? 'Refreshed this morning · updated every day around 06:45 Milan time.'
+      : `Last refreshed ${fmtDay(first)} · today's update hasn't arrived yet (usually around 06:45 Milan time).`;
   }
   function renderAll() {
     state.today = romeToday();
@@ -523,19 +544,21 @@
   }
   async function load() {
     try {
-      const [ev, br] = await Promise.all([getJson('data/events.json'), getJson('data/briefing.json').catch(() => ({ data: [] }))]);
-      state.events = (Array.isArray(ev.data) ? ev.data : []).filter((e) => e && /^\d{4}-\d{2}-\d{2}$/.test(e.start) && /^\d{4}-\d{2}-\d{2}$/.test(e.end) && e.name);
-      state.brief = new Map((Array.isArray(br.data) ? br.data : []).filter((b) => b && b.date).map((b) => [b.date, b]));
-      const m = ev.modified ? new Date(ev.modified) : null;
-      $('updated').textContent = m && !isNaN(m)
-        ? `Updated ${m.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })} (Milan time) · refreshed every morning`
-        : 'Refreshed every morning around 06:45 Milan time';
+      const [ev, br] = await Promise.all([getJson('data/events.json'), getJson('data/briefing.json').catch(() => null)]);
+      const isDay = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s);
+      state.events = (Array.isArray(ev.data) ? ev.data : []).filter((e) => e && isDay(e.start) && isDay(e.end) && e.name);
+      state.briefFailed = !br;
+      state.brief = new Map((br && Array.isArray(br.data) ? br.data : []).filter((b) => b && isDay(b.date)).map((b) => [b.date, b]));
       renderAll();
+      showSections(true);
+      setStatus(freshness(ev.cached), ev.cached);
     } catch (err) {
       console.error(err);
-      $('updated').textContent = '';
-      $('today').replaceChildren(h('p', { class: 'error' }, "Couldn't load the latest events. Check your connection and reload the page."));
-      $('days').replaceChildren();
+      // a later refresh failed: keep what's on screen
+      if (state.events.length) { setStatus("Couldn't refresh; still showing the data loaded earlier.", true); return; }
+      setStatus('', false);
+      $('today').replaceChildren(h('p', { class: 'error' }, "Couldn't load the events. Check your connection, then try again."), retryButton());
+      showSections(false);
     }
   }
   load();
