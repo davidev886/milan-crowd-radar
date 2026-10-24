@@ -176,7 +176,9 @@
   .tip { position: absolute; z-index: 5; pointer-events: none; max-width: 17rem; background: var(--popover); border: 1px solid var(--ring); border-radius: 8px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 0.8rem; line-height: 1.4; }
   .tip-d { color: var(--ink-2); }
   .tip[hidden] { display: none; }
-  #detail { scroll-margin-top: 16px; }
+  #detail, .cell { scroll-margin-top: 16px; }
+  /* one column: the detail sits in the grid, full width under the picked week */
+  .heat > #detail { grid-column: 1 / -1; margin: 6px 0 10px; padding: 12px 0; border-block: 1px solid var(--line); }
   .detail-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
 
   /* events table */
@@ -263,6 +265,7 @@
       <button type="button" class="chip" data-mode="taxi" aria-pressed="false">Taxi</button>
       <button type="button" class="chip" data-mode="linate" aria-pressed="false">Linate</button>
     </div>
+    <p id="detail-live" class="sr-only" aria-live="polite"></p>
     <div class="cal">
       <div>
         <div class="heat-wrap">
@@ -271,7 +274,7 @@
         </div>
         <div class="legend" id="legend"></div>
       </div>
-      <div id="detail" aria-live="polite"></div>
+      <div id="detail"></div>
     </div>
   </section>
 
@@ -450,9 +453,13 @@
       cell.addEventListener('mouseenter', show);
       cell.addEventListener('mouseleave', hide);
       cell.addEventListener('click', () => {
-        hide(); pick(d);
-        // one-column layout (same breakpoint as .cal): the detail sits under the whole grid, so bring it on screen
-        if (oneColumn.matches) $('detail').scrollIntoView({ block: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+        hide();
+        const before = cell.getBoundingClientRect().top;
+        pick(d);
+        if (!oneColumn.matches) return;
+        // the detail may have left a week above: keep the tapped cell where it was, then make room for the detail's head
+        scrollBy(0, cell.getBoundingClientRect().top - before);
+        if (detailEl.getBoundingClientRect().top > innerHeight - 160) cell.scrollIntoView({ block: 'start', behavior: reduceMotion.matches ? 'auto' : 'smooth' });
       });
       nodes.push(cell);
     }
@@ -471,7 +478,7 @@
       const on = c.dataset.d === d;
       c.classList.toggle('picked', on); c.setAttribute('aria-pressed', String(on)); c.tabIndex = on ? 0 : -1;
     }
-    renderDetail();
+    renderDetail(true);
   }
   $('heat').addEventListener('keydown', (ev) => {
     const step = { ArrowLeft: -1, ArrowRight: 1, ArrowUp: -7, ArrowDown: 7 }[ev.key], cell = ev.target.closest('.cell');
@@ -479,15 +486,25 @@
     if (!next) return;
     ev.preventDefault(); cell.tabIndex = -1; next.tabIndex = 0; next.focus();
   });
-  function renderDetail() {
+  // one column (same breakpoint as .cal): the detail opens under the picked week, so a tap doesn't send the grid off screen
+  const detailEl = $('detail'), detailHome = detailEl.parentElement;
+  function placeDetail() {
+    const sun = oneColumn.matches && $('heat').querySelector(`.cell[data-d="${add(state.picked, 6 - dow(state.picked))}"]`);
+    if (sun) sun.after(detailEl); else detailHome.append(detailEl);
+  }
+  oneColumn.addEventListener('change', placeDetail);
+  // announce: only after a pick or a mode switch, and only the short summary (not the whole detail)
+  function renderDetail(announce) {
     const d = state.picked, on = eventsOn(d), l = pressure(on, MODES[state.mode]), b = state.brief.get(d);
     const note = d === state.today ? ' · today' : l && d === peakDay() ? " · the week's peak" : '';
-    $('detail').replaceChildren(
+    detailEl.replaceChildren(
       h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + note), level(l, MODE_FOR[state.mode])),
       split(on, MODES[state.mode]) || '',
       driver(on, MODES[state.mode]) || '',
       b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
+    placeDetail();
+    if (announce) $('detail-live').textContent = `${fmtLong(d)}: ${LABELS[l]} pressure${MODE_FOR[state.mode]}, ${l} of 5`;
   }
 
   // calendar switch: both / taxi / Linate, remembered per viewer
@@ -498,7 +515,7 @@
     if (!m || m === state.mode) return;
     state.mode = m;
     try { localStorage.setItem('mode', m); } catch { /* ignore */ }
-    renderMode(); renderLegend(); renderHeat(); renderDetail();
+    renderMode(); renderLegend(); renderHeat(); renderDetail(true);
   });
 
   // ---------- all events ----------
