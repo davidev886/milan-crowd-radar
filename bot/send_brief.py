@@ -25,6 +25,7 @@ import datetime as dt
 import html
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.parse
@@ -186,6 +187,40 @@ def fit(text: str) -> str:
 
 # ---------------------------------------------------------------- telegram
 
+def _gh_escape(s: str) -> str:
+    return s.replace("%", "%25").replace("\r", "%0D").replace("\n", "%0A")
+
+
+def annotate(level: str, title: str, msg: str) -> None:
+    """On GitHub Actions, also show the message in the run's Annotations box,
+    so nobody has to open the log to see what happened."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        print(f"::{level} title={title}::{_gh_escape(msg)}", flush=True)
+
+
+def fail(msg: str) -> int:
+    print(msg, file=sys.stderr, flush=True)
+    annotate("error", "Telegram brief", msg)
+    return 1
+
+
+def explain(description: str) -> str:
+    d = (description or "").lower()
+    if "unauthorized" in d or d.strip() == "not found":  # 401 wrong token, 404 malformed token
+        return "Telegram rejected the bot token. Copy it again from @BotFather and update the TELEGRAM_BOT_TOKEN secret."
+    if "chat not found" in d:
+        return "Telegram doesn't know that chat. Check TELEGRAM_CHAT_ID, and make sure you pressed Start in your bot."
+    if "blocked" in d:
+        return "The bot is blocked in that chat. Unblock it in Telegram and press Start."
+    if "kicked" in d or "not a member" in d:
+        return "The bot isn't in that group any more. Add it back to the group."
+    if "conflict" in d and "webhook" in d:
+        return "This bot has a webhook set, so its messages can't be listed. Remove the webhook or send any message and set TELEGRAM_CHAT_ID by hand."
+    if d.startswith("could not reach telegram"):
+        return f"{description[:1].upper()}{description[1:]}. GitHub may be having a network problem; the next run will try again."
+    return f"Telegram said: {description}"
+
+
 def api(token: str, method: str, params: dict | None = None) -> dict:
     url = f"https://api.telegram.org/bot{token}/{method}"
     body = urllib.parse.urlencode(params or {}).encode()
@@ -199,13 +234,28 @@ def api(token: str, method: str, params: dict | None = None) -> dict:
         except Exception:  # noqa: BLE001
             payload = {"ok": False, "description": f"HTTP {e.code}"}
         return payload
+    except (urllib.error.URLError, TimeoutError, OSError) as e:
+        return {"ok": False, "description": f"could not reach Telegram ({e})"}
+
+
+def check_token(token: str) -> str | None:
+    """Return a problem description, or None if the token looks right. Never prints the token."""
+    if not token:
+        return "TELEGRAM_BOT_TOKEN is not set. Add it under Settings → Secrets and variables → Actions (the name must be exactly TELEGRAM_BOT_TOKEN)."
+    if not re.fullmatch(r"\d{5,}:[A-Za-z0-9_-]{30,}", token):
+        return ("TELEGRAM_BOT_TOKEN doesn't look like a bot token (it should be numbers, a colon, then a long code, "
+                "with no quotes or spaces). Copy it again from @BotFather.")
+    return None
 
 
 def find_chat_ids(token: str) -> int:
+    me = api(token, "getMe")
+    if not me.get("ok"):
+        return fail(explain(me.get("description")))
+    bot = me["result"].get("username", "your bot")
     res = api(token, "getUpdates")
     if not res.get("ok"):
-        print(f"Telegram error: {res.get('description')}", file=sys.stderr)
-        return 1
+        return fail(explain(res.get("description")))
     chats = {}
     for upd in res.get("result", []):
         for key in ("message", "channel_post", "my_chat_member", "edited_message"):
@@ -214,16 +264,17 @@ def find_chat_ids(token: str) -> int:
                 c = msg["chat"]
                 chats[c["id"]] = c.get("title") or c.get("username") or c.get("first_name") or c.get("type")
     if not chats:
-        print("No chats found. Open your bot in Telegram, press Start (or send it any message), then run this again.")
-        return 1
-    print("Chats that have messaged the bot (use the id as TELEGRAM_CHAT_ID):")
+        return fail(f"The token works (bot @{bot}), but nobody has messaged it yet. Open https://t.me/{bot} in Telegram, "
+                    "press Start or send any message, then run find-chat-id again.")
+    print(f"Chats that have messaged @{bot} (use the id as TELEGRAM_CHAT_ID):")
     for cid, name in chats.items():
         print(f"  {cid}  {name}")
+        annotate("notice", "Your chat id", f"{cid} ({name}). Save this number as the TELEGRAM_CHAT_ID secret.")
     return 0
 
 
 def send(token: str, chat_ids: list[str], text: str) -> int:
-    failures = 0
+    sent, problems = 0, []
     for cid in chat_ids:
         res = api(token, "sendMessage", {
             "chat_id": cid,
@@ -232,11 +283,15 @@ def send(token: str, chat_ids: list[str], text: str) -> int:
             "disable_web_page_preview": "true",
         })
         if res.get("ok"):
+            sent += 1
             print(f"Sent to chat {cid}.")
         else:
-            failures += 1
-            print(f"Could not send to chat {cid}: {res.get('description')}", file=sys.stderr)
-    return 1 if failures else 0
+            problems.append(f"chat {cid}: {explain(res.get('description'))}")
+    if sent:
+        annotate("notice", "Telegram brief", f"Sent to {sent} chat(s).")
+    if problems:
+        return fail("Could not send to " + " | ".join(problems))
+    return 0
 
 
 # ---------------------------------------------------------------- main
@@ -265,10 +320,13 @@ def main(argv: list[str] | None = None) -> int:
     now = dt.datetime.now(dt.timezone.utc)
     token = os.environ.get("TELEGRAM_BOT_TOKEN", "").strip()
 
+    if token.lower().startswith("bot") and token[3:4].isdigit():
+        token = token[3:]  # a pasted "bot123:ABC…" still works
+
     if args.mode == "find-chat-id":
-        if not token:
-            print("Set the TELEGRAM_BOT_TOKEN secret first.", file=sys.stderr)
-            return 1
+        problem = check_token(token)
+        if problem:
+            return fail(problem)
         return find_chat_ids(token)
 
     if not should_run(args.target_local_hour, args.scheduled_utc_hour, now):
@@ -289,12 +347,12 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     chat_ids = [c.strip() for c in os.environ.get("TELEGRAM_CHAT_ID", "").split(",") if c.strip()]
-    if not token:
-        print("TELEGRAM_BOT_TOKEN is not set. Add it as a repository secret.", file=sys.stderr)
-        return 1
+    problem = check_token(token)
+    if problem:
+        return fail(problem)
     if not chat_ids:
-        print("TELEGRAM_CHAT_ID is not set. Run the workflow in 'find-chat-id' mode to get it.", file=sys.stderr)
-        return 1
+        return fail("TELEGRAM_CHAT_ID is not set. Run the workflow with 'find-chat-id' to get your chat id, "
+                    "then save it as a secret named exactly TELEGRAM_CHAT_ID.")
     return send(token, chat_ids, text)
 
 

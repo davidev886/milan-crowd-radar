@@ -30,12 +30,9 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-
+      # The runner's own python3 is enough: the script uses only the standard library.
       - name: Send brief
         env:
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -49,15 +46,15 @@ jobs:
           if [ -z "${DASHBOARD_URL}" ]; then unset DASHBOARD_URL; fi
           if [ "$EVENT_NAME" = "schedule" ]; then
             case "$SCHEDULE" in
-              "7 5 * * *")  python bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 5 ;;
-              "7 6 * * *")  python bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 6 ;;
-              "7 17 * * *") python bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 17 ;;
-              "7 18 * * *") python bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 18 ;;
+              "7 5 * * *")  python3 bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 5 ;;
+              "7 6 * * *")  python3 bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 6 ;;
+              "7 17 * * *") python3 bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 17 ;;
+              "7 18 * * *") python3 bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 18 ;;
               *) echo "Unknown schedule: $SCHEDULE"; exit 1 ;;
             esac
           else
             case "$MANUAL_MODE" in
-              dry-run) python bot/send_brief.py --mode morning --dry-run ;;
-              *)       python bot/send_brief.py --mode "$MANUAL_MODE" ;;
+              dry-run) python3 bot/send_brief.py --mode morning --dry-run ;;
+              *)       python3 bot/send_brief.py --mode "$MANUAL_MODE" ;;
             esac
           fi

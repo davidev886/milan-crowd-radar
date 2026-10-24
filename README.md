@@ -42,7 +42,7 @@ After that it runs by itself.
 ## Handy things
 
 - **Preview without sending:** run the workflow with `dry-run`, or locally:
-  `python bot/send_brief.py --dry-run` (`--mode evening`, `--date 2026-11-08`).
+  `python3 bot/send_brief.py --dry-run` (`--mode evening`, `--date 2026-11-08`).
 - **Change the times:** edit the `cron` lines in
   `.github/workflows/telegram-brief.yml` and the matching
   `--target-local-hour` / `--scheduled-utc-hour` values. Each time is listed
