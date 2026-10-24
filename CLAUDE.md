@@ -74,12 +74,14 @@ big international crowd; 3 = arena concert (12–16k) or large fair/congress;
 visitors, long weekends, airport or ATM strikes (M4 serves Linate); 1 = local crowd.
 
 **Pressure (0–5)** for a day = highest `taxi` or `linate` among that day's
-events, +1 when three or more events overlap, capped at 5. The same rule is
+events, +1 when three of them each score 3+ or three share a `zone` (`City-wide`
+counts in every zone), capped at 5. The same rule is
 implemented in `index.html` (`pressure()`) and `bot/send_brief.py`
 (`pressure()`); keep them identical. The page's `pressure()` also takes an
 optional `keys` list (`['taxi']` or `['linate']`) for the per-mode scores and
 the calendar's Taxi / Linate switch; its default call is the shared rule above
-and must keep matching the bot. The page's `driver()` (the "Top event: … · +1 for N overlapping events" line) restates the same sum, so change it with `pressure()`. The page's "Refreshed…" line is derived from the
+and must keep matching the bot. The page's `overlap()` returns the reason for the +1, which `driver()` (the
+"Top event: … · +1 for 3 big events at once" line) shows, so change them together. The page's "Refreshed…" line is derived from the
 first `briefing.json` date (the routine's run day), so keep that file starting today.
 
 ## Run and test locally

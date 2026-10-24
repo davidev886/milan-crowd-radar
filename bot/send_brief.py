@@ -30,6 +30,7 @@ import sys
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections import Counter
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -57,15 +58,24 @@ def events_on(events: list[dict], day: str) -> list[dict]:
     return sorted(on, key=lambda e: max(int(e.get("taxi", 0)), int(e.get("linate", 0))), reverse=True)
 
 
+def overlap(on: list[dict]) -> bool:
+    """The +1: three events that each score 3+, or three in one zone ("City-wide" counts in every zone)."""
+    if sum(max(int(e.get("taxi", 0)), int(e.get("linate", 0))) >= 3 for e in on) >= 3:
+        return True
+    city = sum(e.get("zone") == "City-wide" for e in on)
+    zones = Counter(e.get("zone") for e in on if e.get("zone") != "City-wide")
+    return city + max(zones.values(), default=0) >= 3
+
+
 def pressure(on: list[dict]) -> int:
-    """Highest taxi or Linate impact of the day's events, +1 when three or more overlap (max 5).
+    """Highest taxi or Linate impact of the day's events, +1 per overlap() (max 5).
 
     Same rule as the dashboard's pressure calendar.
     """
     if not on:
         return 0
     top = max(max(int(e.get("taxi", 0)), int(e.get("linate", 0))) for e in on)
-    return min(5, top + (1 if len(on) >= 3 else 0))
+    return min(5, top + (1 if overlap(on) else 0))
 
 
 # ---------------------------------------------------------------- formatting

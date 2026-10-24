@@ -24,7 +24,7 @@ Claude's scheduled task (06:40)          this repo                    readers
 
 Each push of new data redeploys the web app automatically. The pressure score
 is the highest taxi or Linate impact among the day's events, plus one when three
-or more overlap (max 5). Impact scores are estimates; dates come from the
+events scoring 3+ overlap or three are in the same zone (max 5). Impact scores are estimates; dates come from the
 sources linked on each event.
 
 ## Telegram setup (about 5 minutes)

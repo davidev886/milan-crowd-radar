@@ -252,7 +252,7 @@
 
   <section aria-labelledby="h-next">
     <h2 id="h-next">Coming up</h2>
-    <p class="note">Pressure runs 0–5, scored for taxis and for Linate: the highest impact among the day's events, plus one when three or more overlap. A day's score is the higher of the two.</p>
+    <p class="note">Pressure runs 0–5, scored for taxis and for Linate: the highest impact among the day's events, plus one when three events of 3 or more overlap, or three are in the same area. A day's score is the higher of the two.</p>
     <div id="days" class="card days"><div class="skeleton"></div></div>
   </section>
 
@@ -332,7 +332,16 @@
     .filter((e) => e.start <= day && day <= e.end)
     .sort((a, b) => Math.max(num(b.taxi), num(b.linate)) - Math.max(num(a.taxi), num(a.linate)));
   // default keys = the shared rule (same as bot/send_brief.py); one key scores taxi or Linate alone
-  const pressure = (on, keys = MODES.both) => on.length ? Math.min(5, Math.max(...on.map((e) => Math.max(...keys.map((k) => num(e[k]))))) + (on.length >= 3 ? 1 : 0)) : 0;
+  const pressure = (on, keys = MODES.both) => on.length ? Math.min(5, Math.max(...on.map((e) => Math.max(...keys.map((k) => num(e[k]))))) + (overlap(on, keys) ? 1 : 0)) : 0;
+  // the +1: three events that each score 3+, or three in one zone ('City-wide' counts in every zone); returns the reason, or null
+  function overlap(on, keys = MODES.both) {
+    const big = on.filter((e) => Math.max(...keys.map((k) => num(e[k]))) >= 3).length;
+    if (big >= 3) return `${big} big events at once`;
+    const city = on.filter((e) => e.zone === 'City-wide').length, zones = {};
+    for (const e of on) if (e.zone !== 'City-wide') zones[e.zone] = (zones[e.zone] || 0) + 1;
+    const [zone, n] = Object.entries(zones).sort((a, b) => b[1] - a[1])[0] || [null, 0];
+    return city + n < 3 ? null : n ? `${city + n} events around ${zone}` : `${city} city-wide events`;
+  }
   const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//i.test(u) ? u : null);
 
   // ---------- tiny DOM builder (text only, never innerHTML for data) ----------
@@ -356,7 +365,7 @@
     const best = (e) => Math.max(...keys.map((k) => num(e[k])));
     const top = on.reduce((a, e) => (best(e) > best(a) ? e : a));
     const k = keys.reduce((a, k) => (num(top[k]) > num(top[a]) ? k : a), keys[0]);
-    const bonus = on.length >= 3 && best(top) < 5 ? ` · +1 for ${on.length} overlapping events` : '';
+    const why = overlap(on, keys), bonus = why && best(top) < 5 ? ` · +1 for ${why}` : '';
     return h('p', { class: 'why' }, `Top event: ${top.name}, ${k === 'taxi' ? 'taxi' : 'Linate'} ${best(top)}${bonus}`);
   }
   const meter = (v) => h('span', { class: 'meter', 'aria-hidden': 'true' }, [1, 2, 3, 4, 5].map((i) => h('i', { class: i <= v ? 'on' : null })));
