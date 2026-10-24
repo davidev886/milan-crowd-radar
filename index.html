@@ -362,7 +362,7 @@
   function eventItem(e) {
     return h('div', { class: 'ev' },
       h('div', { class: 'ev-name' }, evName(e)),
-      h('div', { class: 'ev-sub' }, [e.when, e.time, e.venue].filter(Boolean).join(' · ')),
+      h('div', { class: 'ev-sub' }, [e.when, e.time, e.venue, e.status !== 'Confirmed' && e.status].filter(Boolean).join(' · ')), // status: same rule as the table
       h('div', { class: 'imp' },
         h('span', null, `Taxi ${num(e.taxi)}/5`, meter(num(e.taxi))),
         h('span', null, `Linate ${num(e.linate)}/5`, meter(num(e.linate))),
