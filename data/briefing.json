@@ -1,10 +1,58 @@
 [
-  {"date":"2026-10-23","headline":"Quiet day: EXPOdetergo trade fair opens at Rho","taxi":"Normal Friday evening demand; some B2B rides from Rho Fiera around 18:00.","linate":"Usual Friday-evening business departures.","weather":""},
-  {"date":"2026-10-24","headline":"Ligabue closes his tour at Unipol Dome (up to 16,000)","taxi":"Pickups around Santa Giulia / Rogoredo from ~23:00; the area is a red zone on concert days.","linate":"Normal Saturday.","weather":""},
-  {"date":"2026-10-25","headline":"Inter – Fiorentina at San Siro (kick-off time still TBC)","taxi":"San Siro / Lotto jammed before kick-off and ~2 h after. Clocks go back one hour overnight.","linate":"Sunday-evening returns; Fiorentina fans mostly by road and rail.","weather":""},
-  {"date":"2026-10-26","headline":"EXPOdetergo last day; normal Monday","taxi":"Business rides from Rho around closing.","linate":"Monday-morning business arrivals peak (typical pattern).","weather":""},
-  {"date":"2026-10-27","headline":"No major events","taxi":"Normal weekday.","linate":"Normal weekday.","weather":""},
-  {"date":"2026-10-28","headline":"AC Milan – Bologna midweek + Lift Expo at MiCo","taxi":"San Siro after the match (time TBC); CityLife at fair closing 17–19.","linate":"Trade visitors for MiCo fly in Tue evening / Wed morning.","weather":""},
-  {"date":"2026-10-29","headline":"Lift Expo and Paint & Coatings at MiCo","taxi":"CityLife / MiCo at opening and closing.","linate":"Moderate business traffic.","weather":""},
-  {"date":"2026-10-30","headline":"Lift Expo last day; derby-weekend arrivals begin","taxi":"Friday evening plus early Halloween-weekend nightlife.","linate":"Friday departures; fans arriving for Saturday's derby.","weather":""}
+ {
+  "date": "2026-10-24",
+  "headline": "Ligabue closes his tour at Unipol Dome (up to 16,000); ICARE congress ends at MiCo",
+  "taxi": "Santa Giulia / Rogoredo from ~23:00 (red zone around the Dome); CityLife departures early afternoon.",
+  "linate": "Congress doctors leaving MiCo in the afternoon; otherwise a normal Saturday.",
+  "weather": "Hazy, shower around 17:00, 7–17°C"
+ },
+ {
+  "date": "2026-10-25",
+  "headline": "Inter – Fiorentina at San Siro, 12:30 kick-off (~70,000)",
+  "taxi": "San Siro / Lotto from ~11:00 and again 14:30–15:30. Clocks went back one hour overnight.",
+  "linate": "Sunday-evening returns; Fiorentina fans mostly by road and rail.",
+  "weather": "Scattered clouds, 8–15°C"
+ },
+ {
+  "date": "2026-10-26",
+  "headline": "EXPOdetergo last day at Rho; otherwise a normal Monday",
+  "taxi": "Business rides from Rho Fiera around closing.",
+  "linate": "Monday-morning business arrivals peak.",
+  "weather": "Scattered clouds, 5–15°C"
+ },
+ {
+  "date": "2026-10-27",
+  "headline": "No major events; trade visitors arrive for MiCo fairs",
+  "taxi": "Normal weekday.",
+  "linate": "Tuesday-evening arrivals for Lift Expo, VISCOM and Paint & Coatings.",
+  "weather": "Clear, 7–17°C"
+ },
+ {
+  "date": "2026-10-28",
+  "headline": "AC Milan – Bologna at 18:30 (~60,000) plus four trade shows at MiCo",
+  "taxi": "West side squeezed: San Siro arrivals 17–18:30 overlap MiCo closing; exits 20:30–21:30.",
+  "linate": "Trade visitors fly in Tue evening / Wed morning.",
+  "weather": "Scattered clouds, 8–18°C"
+ },
+ {
+  "date": "2026-10-29",
+  "headline": "MiCo fairs continue; rail strike starts at 21:00",
+  "taxi": "CityLife at opening and closing; late evening, stations (Centrale, Garibaldi) as trains start to be cancelled.",
+  "linate": "Moderate business traffic; some rail travellers switch to flights.",
+  "weather": "Scattered clouds, 8–19°C"
+ },
+ {
+  "date": "2026-10-30",
+  "headline": "USB general strike (taxis listed, ATM excluded) on the derby-weekend Friday",
+  "taxi": "Possible fewer taxis while metro runs normally; demand at stations if trains are cancelled (Trenord guaranteed 6–9, 18–21).",
+  "linate": "Flights protected by the 30 Oct–5 Nov franchise; Friday departures plus fans arriving for the derby.",
+  "weather": "Partly cloudy, 10–19°C"
+ },
+ {
+  "date": "2026-10-31",
+  "headline": "Derby AC Milan – Inter at 20:45 (~75,000) on Halloween night",
+  "taxi": "San Siro 22:45–00:30, then centre nightlife until late: the busiest night of the week.",
+  "linate": "Long weekend (All Saints, Sun 1 Nov): Saturday departures and arrivals.",
+  "weather": ""
+ }
 ]
