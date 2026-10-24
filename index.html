@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Milan Crowd Radar</title>
+<meta name="description" content="Day by day: the events in Milan that bring crowds from outside and put pressure on taxis and Linate airport — fairs, congresses, San Siro matches, concerts, strikes.">
+<meta name="theme-color" content="#f9f9f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0d0d0d" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Crowd Radar">
+<meta property="og:title" content="Milan Crowd Radar">
+<meta property="og:description" content="Which days will Milan's taxis and Linate airport be overwhelmed? Fairs, matches, concerts and strikes, refreshed every morning.">
+<style>
+  :root {
+    color-scheme: light;
+    --page: #f9f9f7;
+    --surface: #fcfcfb;
+    --ink: #0b0b0b;
+    --ink-2: #52514e;
+    --muted: #6f6d68;
+    --line: #e1e0d9;
+    --ring: rgba(11, 11, 11, 0.10);
+    --axis: #c3c2b7;
+    --link: #1c5cab;
+    --popover: #ffffff;
+    --shadow: 0 6px 24px rgba(11, 11, 11, 0.10), 0 1px 3px rgba(11, 11, 11, 0.08);
+    --chip-on-bg: #0b0b0b;
+    --chip-on-fg: #fcfcfb;
+    /* pressure scale: one hue (blue), ordinal, validated against the surface */
+    --p0: transparent; --p0-fg: #52514e;
+    --p1: #86b6ef; --p1-fg: #0b0b0b;
+    --p2: #5598e7; --p2-fg: #0b0b0b;
+    --p3: #2a78d6; --p3-fg: #ffffff;
+    --p4: #1c5cab; --p4-fg: #ffffff;
+    --p5: #104281; --p5-fg: #ffffff;
+    --meter-on: #2a78d6;
+    --radius: 12px;
+    --gutter: 16px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) {
+      color-scheme: dark;
+      --page: #0d0d0d;
+      --surface: #1a1a19;
+      --ink: #f0efec;
+      --ink-2: #c3c2b7;
+      --muted: #9a9890;
+      --line: #2c2c2a;
+      --ring: rgba(255, 255, 255, 0.10);
+      --axis: #383835;
+      --link: #86b6ef;
+      --popover: #242423;
+      --shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+      --chip-on-bg: #f0efec;
+      --chip-on-fg: #1a1a19;
+      --p0-fg: #c3c2b7;
+      --p1: #184f95; --p1-fg: #ffffff;
+      --p2: #256abf; --p2-fg: #ffffff;
+      --p3: #3987e5; --p3-fg: #0b0b0b;
+      --p4: #6da7ec; --p4-fg: #0b0b0b;
+      --p5: #9ec5f4; --p5-fg: #0b0b0b;
+      --meter-on: #3987e5;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --page: #0d0d0d; --surface: #1a1a19; --ink: #f0efec; --ink-2: #c3c2b7; --muted: #9a9890;
+    --line: #2c2c2a; --ring: rgba(255, 255, 255, 0.10); --axis: #383835; --link: #86b6ef;
+    --popover: #242423; --shadow: 0 6px 24px rgba(0, 0, 0, 0.5); --chip-on-bg: #f0efec; --chip-on-fg: #1a1a19;
+    --p0-fg: #c3c2b7; --p1: #184f95; --p1-fg: #fff; --p2: #256abf; --p2-fg: #fff;
+    --p3: #3987e5; --p3-fg: #0b0b0b; --p4: #6da7ec; --p4-fg: #0b0b0b; --p5: #9ec5f4; --p5-fg: #0b0b0b; --meter-on: #3987e5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--page); color: var(--ink); font-size: 16px; line-height: 1.5; }
+  a { color: var(--link); text-underline-offset: 2px; }
+  .wrap { max-width: 72rem; margin-inline: auto; padding: 24px max(var(--gutter), env(safe-area-inset-left)) 48px; display: flex; flex-direction: column; gap: 32px; }
+  h1, h2, h3 { margin: 0; line-height: 1.25; }
+  h1 { font-size: clamp(1.6rem, 4.5vw, 2.1rem); font-weight: 650; letter-spacing: -0.01em; }
+  h2 { font-size: 1.15rem; font-weight: 600; }
+  .lede { margin: 6px 0 0; color: var(--ink-2); max-width: 60ch; }
+  .meta { margin: 8px 0 0; color: var(--muted); font-size: 0.85rem; }
+  .note { margin: 4px 0 14px; color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
+  .card { background: var(--surface); border: 1px solid var(--ring); border-radius: var(--radius); padding: 18px; min-width: 0; }
+  .muted { color: var(--muted); }
+  .num { font-variant-numeric: tabular-nums; }
+
+  /* pressure swatch + label (never color alone) */
+  .level { display: inline-flex; align-items: center; gap: 8px; font-size: 0.9rem; white-space: nowrap; }
+  .sw { width: 14px; height: 14px; border-radius: 4px; border: 1px solid var(--ring); flex: none; }
+  .sw[data-l="0"] { background: var(--p0); border-color: var(--axis); }
+  .sw[data-l="1"] { background: var(--p1); } .sw[data-l="2"] { background: var(--p2); }
+  .sw[data-l="3"] { background: var(--p3); } .sw[data-l="4"] { background: var(--p4); } .sw[data-l="5"] { background: var(--p5); }
+
+  /* today */
+  .today { display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: 20px 28px; align-items: start; }
+  @media (max-width: 640px) { .today { grid-template-columns: minmax(0, 1fr); } }
+  .today-date { font-size: 0.85rem; color: var(--muted); }
+  .hero { display: flex; align-items: baseline; gap: 6px; margin: 2px 0 4px; }
+  .hero-n { font-size: 4.5rem; line-height: 1; font-weight: 600; letter-spacing: -0.03em; }
+  .hero-of { font-size: 1.25rem; color: var(--muted); }
+  .headline { font-size: 1.15rem; font-weight: 550; margin: 0 0 10px; }
+  .kv { margin: 0 0 6px; color: var(--ink-2); font-size: 0.95rem; }
+  .kv b { color: var(--ink); font-weight: 600; margin-right: 4px; }
+  .stale { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted); }
+
+  /* event item */
+  .ev { border-top: 1px solid var(--line); padding: 12px 0 2px; display: flex; flex-direction: column; gap: 3px; }
+  .ev:first-child { border-top: 0; padding-top: 4px; }
+  .ev-name { font-weight: 600; }
+  .ev-sub { color: var(--muted); font-size: 0.85rem; }
+  .ev-tip { color: var(--ink-2); font-size: 0.9rem; }
+  .imp { display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.85rem; color: var(--ink-2); }
+  .meter { display: inline-flex; gap: 2px; margin-left: 6px; vertical-align: -1px; }
+  .meter i { width: 7px; height: 11px; border-radius: 2px; background: var(--line); }
+  .meter i.on { background: var(--meter-on); }
+  .events-today { margin-top: 14px; }
+
+  /* coming up */
+  .days { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 12px; }
+  .day { display: flex; flex-direction: column; gap: 8px; }
+  .day-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .day-date { font-weight: 600; }
+  .day-date small { display: block; font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+  .day-head { margin: 0; }
+  .day .kv { font-size: 0.85rem; margin: 0; }
+
+  /* calendar */
+  .cal { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  @media (max-width: 820px) { .cal { grid-template-columns: minmax(0, 1fr); } }
+  .heat-wrap { position: relative; }
+  .heat { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+  .dow { font-size: 0.75rem; color: var(--muted); text-align: center; }
+  .cell { appearance: none; font: inherit; margin: 0; min-height: 44px; border-radius: 6px; border: 1px solid transparent; padding: 3px 5px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; cursor: pointer; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
+  .cell[data-l="0"] { background: var(--p0); color: var(--p0-fg); border-color: var(--line); }
+  .cell[data-l="1"] { background: var(--p1); color: var(--p1-fg); } .cell[data-l="2"] { background: var(--p2); color: var(--p2-fg); }
+  .cell[data-l="3"] { background: var(--p3); color: var(--p3-fg); } .cell[data-l="4"] { background: var(--p4); color: var(--p4-fg); }
+  .cell[data-l="5"] { background: var(--p5); color: var(--p5-fg); }
+  .cell .sc { align-self: flex-end; font-weight: 600; }
+  .cell .d { white-space: nowrap; }
+  .cell .d small { font-size: 0.62rem; margin-left: 2px; }
+  .cell.past { opacity: 0.35; }
+  .cell.is-today { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+  .cell.picked { outline: 2px solid var(--ink); outline-offset: 1px; }
+  .cell:focus-visible { outline: 3px solid var(--link); outline-offset: 1px; }
+  .cell.blank { visibility: hidden; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 0.8rem; color: var(--ink-2); }
+  .tip { position: absolute; z-index: 5; pointer-events: none; max-width: 17rem; background: var(--popover); border: 1px solid var(--ring); border-radius: 8px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 0.8rem; line-height: 1.4; }
+  .tip-d { color: var(--ink-2); }
+  .tip[hidden] { display: none; }
+  .detail-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
+
+  /* events table */
+  .controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 14px; }
+  .search { flex: 1 1 14rem; min-width: 0; padding: 9px 12px; border: 1px solid var(--axis); border-radius: 8px; background: var(--surface); color: var(--ink); font: inherit; }
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .chip { appearance: none; font: inherit; font-size: 0.85rem; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--axis); background: transparent; color: var(--ink); cursor: pointer; }
+  .chip[aria-pressed="true"] { background: var(--chip-on-bg); color: var(--chip-on-fg); border-color: var(--chip-on-bg); }
+  .chip:focus-visible, .search:focus-visible, select:focus-visible { outline: 3px solid var(--link); outline-offset: 1px; }
+  .opts { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 0.85rem; color: var(--ink-2); }
+  .opts select { font: inherit; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--axis); background: var(--surface); color: var(--ink); }
+  .table-wrap { overflow-x: auto; }
+  table.events { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  table.events td.name { min-width: 12rem; }
+  table.events td.when { min-width: 7.5rem; }
+  table.events th { text-align: left; font-weight: 600; font-size: 0.8rem; color: var(--ink-2); padding: 8px; border-bottom: 1px solid var(--axis); white-space: nowrap; }
+  table.events td { padding: 10px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  table.events td.when { font-variant-numeric: tabular-nums; }
+  table.events td.imp-c { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .cat { display: inline-block; border: 1px solid var(--axis); border-radius: 999px; padding: 0 8px; font-size: 0.8rem; white-space: nowrap; }
+  @media (max-width: 760px) {
+    table.events thead { display: none; }
+    .table-wrap { overflow-x: visible; }
+    table.events, table.events tbody, table.events tr, table.events td { display: block; width: 100%; }
+    table.events tr { border-bottom: 1px solid var(--line); padding: 12px 0; }
+    table.events td { border: 0; padding: 2px 0; }
+    table.events td[data-label]::before { content: attr(data-label) ": "; color: var(--muted); font-size: 0.8rem; }
+    table.events td.name { font-weight: 600; font-size: 1rem; padding-bottom: 4px; }
+    table.events td.when { color: var(--ink-2); font-size: 0.85rem; }
+    table.events td.when .muted { display: inline; }
+    table.events td.when .muted::before { content: " · "; }
+    table.events td.imp-c, table.events td.where, table.events td.type { display: inline-block; width: auto; margin-right: 14px; }
+    table.events td.type::before, table.events td.where::before { content: none; }
+    table.events td.where { color: var(--ink-2); }
+  }
+  .more { margin-top: 14px; }
+  .empty { color: var(--muted); padding: 12px 0; }
+  .error { color: var(--ink-2); }
+
+  footer { color: var(--muted); font-size: 0.85rem; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 18px; }
+  footer p { margin: 0 0 8px; max-width: 75ch; }
+  footer b { color: var(--ink-2); font-weight: 600; }
+
+  .skeleton { min-height: 6rem; border-radius: var(--radius); background: linear-gradient(90deg, var(--line), transparent, var(--line)); background-size: 200% 100%; opacity: 0.5; }
+  @media (prefers-reduced-motion: no-preference) { .skeleton { animation: sk 1.4s ease-in-out infinite; } }
+  @keyframes sk { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <h1>Milan crowd radar</h1>
+    <p class="lede">Which days will Milan's taxis and Linate airport be under pressure? Trade fairs, congresses, San Siro matches, big concerts and transport strikes, day by day.</p>
+    <p class="meta" id="updated">Loading the latest data…</p>
+  </header>
+
+  <section aria-labelledby="h-today">
+    <h2 id="h-today" hidden>Today</h2>
+    <div id="today" class="card"><div class="skeleton"></div></div>
+  </section>
+
+  <section aria-labelledby="h-next">
+    <h2 id="h-next">Coming up</h2>
+    <p class="note">Pressure runs 0–5: the highest taxi or Linate impact among the day's events, plus one when three or more overlap.</p>
+    <div id="days" class="days"><div class="skeleton"></div></div>
+  </section>
+
+  <section aria-labelledby="h-cal" class="card">
+    <h2 id="h-cal">Pressure calendar</h2>
+    <p class="note">Tap a day to see what's on. The number in each day is its pressure score; the stronger the colour, the more pressure on taxis and Linate.</p>
+    <div class="cal">
+      <div>
+        <div class="heat-wrap">
+          <div id="heat" class="heat" role="grid" aria-label="Pressure by day"></div>
+          <div id="tip" class="tip" hidden></div>
+        </div>
+        <div class="legend" id="legend"></div>
+      </div>
+      <div id="detail" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-all" class="card">
+    <h2 id="h-all">All events</h2>
+    <p class="note">Each event links to the page its date was checked against.</p>
+    <div class="controls">
+      <input id="q" class="search" type="search" placeholder="Search events, venues, tips…" aria-label="Search events" autocomplete="off">
+      <div id="chips" class="chips" role="group" aria-label="Event type"></div>
+      <div class="opts">
+        <label>Sort <select id="sort"><option value="date">by date</option><option value="taxi">by taxi impact</option><option value="linate">by Linate impact</option></select></label>
+        <label><input type="checkbox" id="past"> Include past</label>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <table class="events">
+        <thead><tr><th>When</th><th>Event</th><th>Where</th><th>Type</th><th>Taxi</th><th>Linate</th><th>Peak</th><th>Tip</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+    <button type="button" id="more" class="chip more" hidden></button>
+  </section>
+
+  <footer>
+    <p><b>Taxi impact (1–5):</b> extra taxi demand or disruption in the city. 5 means a strike that hits taxis or public transport, or a crowd of 100,000+ across the day; 1 is a small local event.</p>
+    <p><b>Linate impact (1–5):</b> how much an event fills Linate with visitors from outside (congress delegates, international buyers and fans), or pushes travellers onto it.</p>
+    <p>Events are researched every morning from public sources by Claude, an AI assistant; impact scores are estimates. Kick-off times and strikes can change at short notice, so check the linked source before relying on a date. Times are Milan time.</p>
+    <p>On your phone: Share → <b>Add to Home Screen</b> to open it like an app. · <a href="https://github.com/davidev886/milan-crowd-radar">Source on GitHub</a></p>
+  </footer>
+</main>
+
+<script>
+(() => {
+  'use strict';
+  const LABELS = ['Quiet', 'Low', 'Moderate', 'Busy', 'High', 'Extreme'];
+  const DAY_MS = 864e5;
+  const $ = (id) => document.getElementById(id);
+  const state = { events: [], brief: new Map(), today: '', picked: '', q: '', cat: 'All', sort: 'date', past: false, all: false };
+
+  // ---------- dates (all in Milan time, as YYYY-MM-DD strings) ----------
+  const romeToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Rome', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+  const toDate = (s) => new Date(s + 'T12:00:00Z');
+  const iso = (d) => d.toISOString().slice(0, 10);
+  const add = (s, n) => iso(new Date(toDate(s).getTime() + n * DAY_MS));
+  const fmtDay = (s) => toDate(s).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', timeZone: 'UTC' });
+  const fmtLong = (s) => toDate(s).toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long', timeZone: 'UTC' });
+  const dow = (s) => (toDate(s).getUTCDay() + 6) % 7; // Monday = 0
+
+  // ---------- data helpers ----------
+  const num = (v) => { const n = Number(v); return Number.isFinite(n) ? Math.max(0, Math.min(5, Math.round(n))) : 0; };
+  const eventsOn = (day) => state.events
+    .filter((e) => e.start <= day && day <= e.end)
+    .sort((a, b) => Math.max(num(b.taxi), num(b.linate)) - Math.max(num(a.taxi), num(a.linate)));
+  const pressure = (on) => on.length ? Math.min(5, Math.max(...on.map((e) => Math.max(num(e.taxi), num(e.linate)))) + (on.length >= 3 ? 1 : 0)) : 0;
+  const safeUrl = (u) => (typeof u === 'string' && /^https:\/\//i.test(u) ? u : null);
+
+  // ---------- tiny DOM builder (text only, never innerHTML for data) ----------
+  function h(tag, props, ...kids) {
+    const n = document.createElement(tag);
+    if (props) for (const [k, v] of Object.entries(props)) {
+      if (v == null || v === false) continue;
+      if (k === 'class') n.className = v;
+      else if (k === 'dataset') Object.assign(n.dataset, v);
+      else if (k.startsWith('on')) n.addEventListener(k.slice(2), v);
+      else n.setAttribute(k, v === true ? '' : v);
+    }
+    for (const k of kids.flat()) if (k != null && k !== false) n.append(k.nodeType ? k : String(k));
+    return n;
+  }
+  const level = (l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l}/5 · ${LABELS[l]}`);
+  const meter = (v) => h('span', { class: 'meter', 'aria-hidden': 'true' }, [1, 2, 3, 4, 5].map((i) => h('i', { class: i <= v ? 'on' : null })));
+  const evName = (e) => { const u = safeUrl(e.source); return u ? h('a', { href: u, target: '_blank', rel: 'noopener noreferrer' }, e.name) : e.name; };
+  function eventItem(e) {
+    return h('div', { class: 'ev' },
+      h('div', { class: 'ev-name' }, evName(e)),
+      h('div', { class: 'ev-sub' }, [e.when, e.time, e.venue].filter(Boolean).join(' · ')),
+      h('div', { class: 'imp' },
+        h('span', null, `Taxi ${num(e.taxi)}/5`, meter(num(e.taxi))),
+        h('span', null, `Linate ${num(e.linate)}/5`, meter(num(e.linate))),
+        e.peak ? h('span', null, `Peak: ${e.peak}`) : null),
+      e.tip ? h('div', { class: 'ev-tip' }, e.tip) : null);
+  }
+
+  // ---------- today ----------
+  function renderToday() {
+    const d = state.today, on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
+    const left = h('div', null,
+      h('div', { class: 'today-date' }, `Today · ${fmtLong(d)}`),
+      h('div', { class: 'hero' }, h('span', { class: 'hero-n' }, String(l)), h('span', { class: 'hero-of' }, '/5')),
+      h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), LABELS[l] + ' pressure'));
+    const right = h('div', null,
+      !b && state.brief.size ? h('p', { class: 'stale' }, "Today's written brief hasn't been refreshed yet; the events below are current.") : null,
+      h('p', { class: 'headline' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed today.')),
+      b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
+      b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
+      b && b.weather ? h('p', { class: 'kv' }, h('b', null, 'Weather'), b.weather) : null,
+      on.length ? h('div', { class: 'events-today' }, on.map(eventItem)) : null);
+    $('today').replaceChildren(h('div', { class: 'today' }, left, right));
+  }
+
+  // ---------- coming up (next 7 days) ----------
+  function renderDays() {
+    const cards = [];
+    for (let i = 1; i <= 7; i++) {
+      const d = add(state.today, i), on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
+      cards.push(h('article', { class: 'card day' },
+        h('div', { class: 'day-top' }, h('div', { class: 'day-date' }, fmtDay(d), i === 1 ? h('small', null, 'tomorrow') : null), level(l)),
+        h('p', { class: 'day-head' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed.')),
+        b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
+        b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
+        b && b.weather ? h('p', { class: 'kv' }, h('b', null, 'Weather'), b.weather) : null));
+    }
+    $('days').replaceChildren(...cards);
+  }
+
+  // ---------- calendar ----------
+  function renderLegend() {
+    $('legend').replaceChildren(...LABELS.map((t, l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l} ${t}`)));
+  }
+  function renderHeat() {
+    const start = add(state.today, -dow(state.today));
+    const lastEnd = state.events.reduce((m, e) => (e.end > m ? e.end : m), state.today);
+    let end = lastEnd > add(start, 69) ? lastEnd : add(start, 69);
+    if (end > add(start, 7 * 16 - 1)) end = add(start, 7 * 16 - 1); // at most 16 weeks
+    end = add(end, 6 - dow(end));
+    const tip = $('tip'), wrap = $('heat').parentElement;
+    const nodes = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((w) => h('div', { class: 'dow', 'aria-hidden': 'true' }, w));
+    let first = true;
+    for (let d = start; d <= end; d = add(d, 1)) {
+      const on = eventsOn(d), l = pressure(on), dt = toDate(d);
+      const showMonth = first || dt.getUTCDate() === 1;
+      const label = h('span', { class: 'd' }, String(dt.getUTCDate()),
+        showMonth ? h('small', null, dt.toLocaleDateString('en-GB', { month: 'short', timeZone: 'UTC' })) : null);
+      first = false;
+      const names = on.map((e) => e.name).join(' · ');
+      const cell = h('button', {
+        type: 'button', class: ['cell', d < state.today && 'past', d === state.today && 'is-today', d === state.picked && 'picked'].filter(Boolean).join(' '),
+        dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} pressure, ${l} of 5${names ? '. ' + names : ''}`,
+        'aria-pressed': d === state.picked ? 'true' : 'false',
+      }, label, h('span', { class: 'sc' }, l ? String(l) : ''));
+      const show = () => {
+        tip.replaceChildren(h('div', { class: 'tip-d' }, `${fmtDay(d)} · ${LABELS[l]}${l ? ` (${l}/5)` : ''}`), h('div', null, names || 'No major events listed'));
+        tip.hidden = false;
+        const w = wrap.getBoundingClientRect(), c = cell.getBoundingClientRect(), tw = tip.offsetWidth;
+        tip.style.left = Math.max(0, Math.min(c.left - w.left + c.width / 2 - tw / 2, w.width - tw)) + 'px';
+        tip.style.top = (c.bottom - w.top + 6) + 'px';
+      };
+      const hide = () => { tip.hidden = true; };
+      cell.addEventListener('mouseenter', show);
+      cell.addEventListener('mouseleave', hide);
+      cell.addEventListener('click', () => { hide(); state.picked = d; renderHeat(); renderDetail(); });
+      nodes.push(cell);
+    }
+    $('heat').replaceChildren(...nodes);
+  }
+  function renderDetail() {
+    const d = state.picked, on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
+    $('detail').replaceChildren(
+      h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + (d === state.today ? ' · today' : '')), level(l)),
+      b && b.headline ? h('p', { class: 'kv' }, b.headline) : null,
+      on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
+  }
+
+  // ---------- all events ----------
+  function renderChips() {
+    const cats = ['All', ...Array.from(new Set(state.events.map((e) => e.category).filter(Boolean))).sort()];
+    $('chips').replaceChildren(...cats.map((c) => h('button', {
+      type: 'button', class: 'chip', 'aria-pressed': String(state.cat === c),
+      onclick: () => { state.cat = c; renderChips(); renderRows(); },
+    }, c)));
+  }
+  function renderRows() {
+    const q = state.q.toLowerCase();
+    let rows = state.events.filter((e) => (state.past || e.end >= state.today)
+      && (state.cat === 'All' || e.category === state.cat)
+      && (!q || [e.name, e.venue, e.zone, e.category, e.tip, e.when, e.status].join(' ').toLowerCase().includes(q)));
+    const k = state.sort;
+    rows = rows.slice().sort((a, b) => (k === 'date' ? 0 : num(b[k]) - num(a[k])) || a.start.localeCompare(b.start) || a.name.localeCompare(b.name));
+    const more = $('more'), LIMIT = 15, total = rows.length;
+    const narrowed = q || state.cat !== 'All';
+    if (!state.all && !narrowed && total > LIMIT) {
+      rows = rows.slice(0, LIMIT);
+      more.textContent = `Show all ${total} events`;
+      more.hidden = false;
+    } else more.hidden = true;
+    if (!rows.length) { $('rows').replaceChildren(h('tr', null, h('td', { class: 'empty', colspan: '8' }, 'No events match.'))); return; }
+    $('rows').replaceChildren(...rows.map((e) => h('tr', null,
+      h('td', { class: 'when' }, e.when, e.time ? h('div', { class: 'muted' }, e.time) : null),
+      h('td', { class: 'name' }, evName(e), e.status && e.status !== 'Confirmed' ? h('div', { class: 'muted' }, e.status) : null),
+      h('td', { class: 'where', 'data-label': 'Where' }, e.venue),
+      h('td', { class: 'type', 'data-label': 'Type' }, h('span', { class: 'cat' }, e.category)),
+      h('td', { class: 'imp-c', 'data-label': 'Taxi' }, `${num(e.taxi)}/5`, meter(num(e.taxi))),
+      h('td', { class: 'imp-c', 'data-label': 'Linate' }, `${num(e.linate)}/5`, meter(num(e.linate))),
+      h('td', { 'data-label': 'Peak' }, e.peak || '—'),
+      h('td', { 'data-label': 'Tip' }, e.tip || '—'))));
+  }
+  $('q').addEventListener('input', (ev) => { state.q = ev.target.value.trim(); renderRows(); });
+  $('sort').addEventListener('change', (ev) => { state.sort = ev.target.value; renderRows(); });
+  $('past').addEventListener('change', (ev) => { state.past = ev.target.checked; renderRows(); });
+  $('more').addEventListener('click', () => { state.all = true; renderRows(); });
+
+  // ---------- load ----------
+  async function getJson(path) {
+    const res = await fetch(path, { cache: 'no-cache' });
+    if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+    return { data: await res.json(), modified: res.headers.get('last-modified') };
+  }
+  function renderAll() {
+    state.today = romeToday();
+    if (!state.picked || state.picked < add(state.today, -dow(state.today))) state.picked = state.today;
+    renderToday(); renderDays(); renderLegend(); renderHeat(); renderDetail(); renderChips(); renderRows();
+  }
+  async function load() {
+    try {
+      const [ev, br] = await Promise.all([getJson('data/events.json'), getJson('data/briefing.json').catch(() => ({ data: [] }))]);
+      state.events = (Array.isArray(ev.data) ? ev.data : []).filter((e) => e && /^\d{4}-\d{2}-\d{2}$/.test(e.start) && /^\d{4}-\d{2}-\d{2}$/.test(e.end) && e.name);
+      state.brief = new Map((Array.isArray(br.data) ? br.data : []).filter((b) => b && b.date).map((b) => [b.date, b]));
+      const m = ev.modified ? new Date(ev.modified) : null;
+      $('updated').textContent = m && !isNaN(m)
+        ? `Updated ${m.toLocaleString('en-GB', { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZone: 'Europe/Rome' })} (Milan time) · refreshed every morning`
+        : 'Refreshed every morning around 06:45 Milan time';
+      renderAll();
+    } catch (err) {
+      console.error(err);
+      $('updated').textContent = '';
+      $('today').replaceChildren(h('p', { class: 'error' }, "Couldn't load the latest events. Check your connection and reload the page."));
+      $('days').replaceChildren();
+    }
+  }
+  load();
+  // keep "today" right if the page stays open past midnight or is reopened from the home screen
+  document.addEventListener('visibilitychange', () => { if (!document.hidden && state.events.length && romeToday() !== state.today) load(); });
+})();
+</script>
+</body>
+</html>

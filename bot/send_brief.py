@@ -38,7 +38,7 @@ DATA_DIR = ROOT / "data"
 TZ = ZoneInfo("Europe/Rome")
 LABELS = ["Quiet", "Low", "Moderate", "Busy", "High", "Extreme"]
 MAX_LEN = 4000  # Telegram allows 4096 characters per message
-DEFAULT_DASHBOARD = "https://claude.ai/artifact/K9ot1C95hQFX1uB4xEN5dk"
+DEFAULT_DASHBOARD = "https://davidev886.github.io/milan-crowd-radar/"
 
 
 # ---------------------------------------------------------------- data
