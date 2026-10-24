@@ -172,6 +172,7 @@
   /* two-tone focus: an inner ring of the card colour shows on every level, the outer ring on the gaps */
   .cell:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: inset 0 0 0 2px var(--surface); }
   .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 0.8rem; color: var(--ink-2); }
+  .mode-note { flex-basis: 100%; font-weight: 600; color: var(--ink); }
   .tip { position: absolute; z-index: 5; pointer-events: none; max-width: 17rem; background: var(--popover); border: 1px solid var(--ring); border-radius: 8px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 0.8rem; line-height: 1.4; }
   .tip-d { color: var(--ink-2); }
   .tip[hidden] { display: none; }
@@ -307,7 +308,7 @@
   'use strict';
   const LABELS = ['Quiet', 'Low', 'Moderate', 'Busy', 'High', 'Extreme'];
   const MODES = { both: ['taxi', 'linate'], taxi: ['taxi'], linate: ['linate'] }; // calendar switch
-  const MODE_WORD = { both: '', taxi: 'taxi ', linate: 'Linate ' };
+  const MODE_FOR = { both: '', taxi: ' for taxis', linate: ' for Linate' };
   const DAY_MS = 864e5;
   const $ = (id) => document.getElementById(id);
   const wide = matchMedia('(min-width: 720px)'); // same breakpoint as the .day agenda columns
@@ -345,8 +346,8 @@
     for (const k of kids.flat()) if (k != null && k !== false) n.append(k.nodeType ? k : String(k));
     return n;
   }
-  const level = (l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l}/5 · ${LABELS[l]}`);
-  const split = (on) => on.length ? h('p', { class: 'split' }, `Taxi ${pressure(on, MODES.taxi)}/5 · Linate ${pressure(on, MODES.linate)}/5`) : null;
+  const level = (l, tail = '') => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l}/5 · ${LABELS[l]}${tail}`);
+  const split = (on, keys = MODES.both) => on.length ? h('p', { class: 'split' }, keys.map((k) => `${k === 'taxi' ? 'Taxi' : 'Linate'} ${pressure(on, [k])}/5`).join(' · ')) : null;
   // what sets the score: the top event, plus the overlap bonus unless the top is already 5 (same sum as pressure())
   function driver(on, keys = MODES.both) {
     if (!on.length) return null;
@@ -413,7 +414,8 @@
 
   // ---------- calendar ----------
   function renderLegend() {
-    $('legend').replaceChildren(...LABELS.map((t, l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l} ${t}`)));
+    $('legend').replaceChildren(...LABELS.map((t, l) => h('span', { class: 'level' }, h('span', { class: 'sw', dataset: { l } }), `${l} ${t}`)),
+      state.mode === 'both' ? '' : h('span', { class: 'mode-note' }, `Scores${MODE_FOR[state.mode]} only`));
   }
   function renderHeat() {
     const start = add(state.today, -dow(state.today));
@@ -433,12 +435,12 @@
       const names = on.map((e) => e.name).join(' · ');
       const cell = h('button', {
         type: 'button', class: ['cell', d < state.today && 'past', d === state.today && 'is-today', d === state.picked && 'picked'].filter(Boolean).join(' '),
-        dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} ${MODE_WORD[state.mode]}pressure, ${l} of 5${names ? '. ' + names : ''}`,
+        dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} pressure${MODE_FOR[state.mode]}, ${l} of 5${names ? '. ' + names : ''}`,
         'aria-pressed': d === state.picked ? 'true' : 'false', 'aria-current': d === state.today ? 'date' : null,
         tabindex: d === state.picked ? '0' : '-1', // roving tabindex: one Tab stop, arrows move (see keydown below)
       }, label, h('span', { class: 'sc' }, l ? String(l) : ''));
       const show = () => {
-        tip.replaceChildren(h('div', { class: 'tip-d' }, `${fmtDay(d)} · ${LABELS[l]}${l ? ` (${l}/5)` : ''}`), h('div', null, names || 'No major events listed'));
+        tip.replaceChildren(h('div', { class: 'tip-d' }, `${fmtDay(d)} · ${LABELS[l]}${MODE_FOR[state.mode]}${l ? ` (${l}/5)` : ''}`), h('div', null, names || 'No major events listed'));
         tip.hidden = false;
         const w = wrap.getBoundingClientRect(), c = cell.getBoundingClientRect(), tw = tip.offsetWidth;
         tip.style.left = Math.max(0, Math.min(c.left - w.left + c.width / 2 - tw / 2, w.width - tw)) + 'px';
@@ -481,8 +483,8 @@
     const d = state.picked, on = eventsOn(d), l = pressure(on, MODES[state.mode]), b = state.brief.get(d);
     const note = d === state.today ? ' · today' : l && d === peakDay() ? " · the week's peak" : '';
     $('detail').replaceChildren(
-      h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + note), level(l)),
-      split(on) || '',
+      h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + note), level(l, MODE_FOR[state.mode])),
+      split(on, MODES[state.mode]) || '',
       driver(on, MODES[state.mode]) || '',
       b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
@@ -496,7 +498,7 @@
     if (!m || m === state.mode) return;
     state.mode = m;
     try { localStorage.setItem('mode', m); } catch { /* ignore */ }
-    renderMode(); renderHeat(); renderDetail();
+    renderMode(); renderLegend(); renderHeat(); renderDetail();
   });
 
   // ---------- all events ----------
