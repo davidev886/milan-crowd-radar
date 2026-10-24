@@ -76,7 +76,11 @@ visitors, long weekends, airport or ATM strikes (M4 serves Linate); 1 = local cr
 **Pressure (0–5)** for a day = highest `taxi` or `linate` among that day's
 events, +1 when three or more events overlap, capped at 5. The same rule is
 implemented in `index.html` (`pressure()`) and `bot/send_brief.py`
-(`pressure()`); keep them identical.
+(`pressure()`); keep them identical. The page's `pressure()` also takes an
+optional `keys` list (`['taxi']` or `['linate']`) for the per-mode scores and
+the calendar's Taxi / Linate switch; its default call is the shared rule above
+and must keep matching the bot. The page's "Refreshed…" line is derived from the
+first `briefing.json` date (the routine's run day), so keep that file starting today.
 
 ## Run and test locally
 
