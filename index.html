@@ -109,7 +109,7 @@
   .kv { margin: 0 0 6px; color: var(--ink-2); font-size: 0.95rem; }
   .kv b { color: var(--ink); font-weight: 600; margin-right: 4px; }
   .split { margin: 6px 0 0; font-size: 0.85rem; color: var(--ink-2); font-variant-numeric: tabular-nums; }
-  .day .split, .detail-head + .split { margin: 0 0 4px; }
+  .detail-head + .split { margin: 0 0 4px; }
   .mode { margin-bottom: 14px; }
   .stale { margin: 0 0 10px; font-size: 0.85rem; color: var(--muted); }
 
@@ -125,14 +125,23 @@
   .meter i.on { background: var(--meter-on); }
   .events-today { margin-top: 14px; }
 
-  /* coming up */
-  .days { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr)); gap: 12px; }
-  .day { display: flex; flex-direction: column; gap: 8px; }
-  .day-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-  .day-date { font-weight: 600; font-size: inherit; line-height: inherit; }
+  /* coming up: one agenda list, a row per day (date · score · what's on) */
+  .days { padding-block: 2px; }
+  .days:empty { display: none; }
+  .day { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "date score" "body body"; gap: 6px 16px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .day:first-child { border-top: 0; padding-top: 0; }
+  .day:last-child { padding-bottom: 0; }
+  .day-date { grid-area: date; font-weight: 600; font-size: inherit; line-height: inherit; }
   .day-date small { display: block; font-weight: 400; font-size: 0.8rem; color: var(--muted); }
+  .day-score { grid-area: score; text-align: right; }
+  .day-score .split { margin: 2px 0 0; }
+  .day-body { grid-area: body; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
   .day-head { margin: 0; }
   .day .kv { font-size: 0.85rem; margin: 0; }
+  @media (min-width: 720px) {
+    .day { grid-template-columns: 7.5rem 10.5rem minmax(0, 1fr); grid-template-areas: "date score body"; gap: 6px 24px; }
+    .day-score { text-align: left; }
+  }
 
   /* calendar */
   .cal { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 24px; align-items: start; }
@@ -224,7 +233,7 @@
   <section aria-labelledby="h-next">
     <h2 id="h-next">Coming up</h2>
     <p class="note">Pressure runs 0–5, scored for taxis and for Linate: the highest impact among the day's events, plus one when three or more overlap. A day's score is the higher of the two.</p>
-    <div id="days" class="days"><div class="skeleton"></div></div>
+    <div id="days" class="card days"><div class="skeleton"></div></div>
   </section>
 
   <section aria-labelledby="h-cal" class="card">
@@ -355,13 +364,14 @@
     const cards = [];
     for (let i = 1; i <= 7; i++) {
       const d = add(state.today, i), on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
-      cards.push(h('article', { class: 'card day' },
-        h('div', { class: 'day-top' }, h('h3', { class: 'day-date' }, fmtDay(d), i === 1 ? h('small', null, ' tomorrow') : null), level(l)),
-        split(on),
-        h('p', { class: 'day-head' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed.')),
-        b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
-        b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
-        b && b.weather ? h('p', { class: 'kv' }, h('b', null, 'Weather'), b.weather) : null));
+      cards.push(h('article', { class: 'day' },
+        h('h3', { class: 'day-date' }, fmtDay(d), i === 1 ? h('small', null, ' tomorrow') : null),
+        h('div', { class: 'day-score' }, level(l), split(on)),
+        h('div', { class: 'day-body' },
+          h('p', { class: 'day-head' }, (b && b.headline) || (on.length ? on.map((e) => e.name).slice(0, 2).join(' · ') : 'No major events listed.')),
+          b && b.taxi ? h('p', { class: 'kv' }, h('b', null, 'Taxi'), b.taxi) : null,
+          b && b.linate ? h('p', { class: 'kv' }, h('b', null, 'Linate'), b.linate) : null,
+          b && b.weather ? h('p', { class: 'kv' }, h('b', null, 'Weather'), b.weather) : null)));
     }
     $('days').replaceChildren(...cards);
   }
@@ -411,6 +421,12 @@
     }
     $('heat').replaceChildren(...nodes);
   }
+  // highest-pressure day of the next 7 (first one wins); the calendar opens on it, since today is already at the top
+  function peakDay() {
+    let best = add(state.today, 1), top = -1;
+    for (let i = 1; i <= 7; i++) { const d = add(state.today, i), l = pressure(eventsOn(d), MODES[state.mode]); if (l > top) { best = d; top = l; } }
+    return best;
+  }
   // update the picked cell in place (no rebuild), so keyboard focus stays where it is
   function pick(d) {
     state.picked = d;
@@ -428,8 +444,9 @@
   });
   function renderDetail() {
     const d = state.picked, on = eventsOn(d), l = pressure(on, MODES[state.mode]), b = state.brief.get(d);
+    const note = d === state.today ? ' · today' : l && d === peakDay() ? " · the week's peak" : '';
     $('detail').replaceChildren(
-      h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + (d === state.today ? ' · today' : '')), level(l)),
+      h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + note), level(l)),
       split(on) || '',
       b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
@@ -492,7 +509,7 @@
   }
   function renderAll() {
     state.today = romeToday();
-    if (!state.picked || state.picked < add(state.today, -dow(state.today))) state.picked = state.today;
+    if (!state.picked || state.picked < add(state.today, -dow(state.today))) state.picked = peakDay();
     renderToday(); renderDays(); renderLegend(); renderMode(); renderHeat(); renderDetail(); renderChips(); renderRows();
   }
   async function load() {
