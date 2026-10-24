@@ -136,16 +136,17 @@
   .heat-wrap { position: relative; }
   .heat { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
   .dow { font-size: 0.75rem; color: var(--muted); text-align: center; }
-  .cell { appearance: none; font: inherit; margin: 0; min-height: 44px; border-radius: 6px; border: 1px solid transparent; padding: 3px 5px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; cursor: pointer; font-size: 0.75rem; font-variant-numeric: tabular-nums; }
-  .cell[data-l="0"] { background: var(--p0); color: var(--p0-fg); border-color: var(--line); }
-  .cell[data-l="1"] { background: var(--p1); color: var(--p1-fg); } .cell[data-l="2"] { background: var(--p2); color: var(--p2-fg); }
-  .cell[data-l="3"] { background: var(--p3); color: var(--p3-fg); } .cell[data-l="4"] { background: var(--p4); color: var(--p4-fg); }
-  .cell[data-l="5"] { background: var(--p5); color: var(--p5-fg); }
+  .cell { appearance: none; font: inherit; margin: 0; min-height: 44px; border-radius: 6px; border: 1px solid transparent; padding: 3px 5px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; cursor: pointer; font-size: 0.75rem; font-variant-numeric: tabular-nums; background: var(--bg); color: var(--fg); }
+  .cell[data-l="0"] { --bg: var(--surface); --fg: var(--p0-fg); border-color: var(--line); }
+  .cell[data-l="1"] { --bg: var(--p1); --fg: var(--p1-fg); } .cell[data-l="2"] { --bg: var(--p2); --fg: var(--p2-fg); }
+  .cell[data-l="3"] { --bg: var(--p3); --fg: var(--p3-fg); } .cell[data-l="4"] { --bg: var(--p4); --fg: var(--p4-fg); }
+  .cell[data-l="5"] { --bg: var(--p5); --fg: var(--p5-fg); }
   .cell .sc { align-self: flex-end; font-weight: 600; }
   .cell .d { white-space: nowrap; }
   .cell .d small { font-size: 0.62rem; margin-left: 2px; }
   .cell.past { opacity: 0.35; }
-  .cell.is-today { box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--ink); }
+  /* today: date in an inverted badge (same contrast as the cell's text), so it never looks like the picked ring */
+  .cell.is-today .d { align-self: flex-start; margin-left: -3px; padding: 0 3px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 600; }
   .cell.picked { outline: 2px solid var(--ink); outline-offset: 1px; }
   .cell:focus-visible { outline: 3px solid var(--link); outline-offset: 1px; }
   .cell.blank { visibility: hidden; }
@@ -153,6 +154,7 @@
   .tip { position: absolute; z-index: 5; pointer-events: none; max-width: 17rem; background: var(--popover); border: 1px solid var(--ring); border-radius: 8px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 0.8rem; line-height: 1.4; }
   .tip-d { color: var(--ink-2); }
   .tip[hidden] { display: none; }
+  #detail { scroll-margin-top: 16px; }
   .detail-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 6px; }
 
   /* events table */
@@ -269,6 +271,7 @@
   const LABELS = ['Quiet', 'Low', 'Moderate', 'Busy', 'High', 'Extreme'];
   const DAY_MS = 864e5;
   const $ = (id) => document.getElementById(id);
+  const oneColumn = matchMedia('(max-width: 820px)'), reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
   const state = { events: [], brief: new Map(), today: '', picked: '', q: '', cat: 'All', sort: 'date', past: false, all: false };
 
   // ---------- dates (all in Milan time, as YYYY-MM-DD strings) ----------
@@ -370,7 +373,7 @@
       const cell = h('button', {
         type: 'button', class: ['cell', d < state.today && 'past', d === state.today && 'is-today', d === state.picked && 'picked'].filter(Boolean).join(' '),
         dataset: { l, d }, 'aria-label': `${fmtLong(d)}: ${LABELS[l]} pressure, ${l} of 5${names ? '. ' + names : ''}`,
-        'aria-pressed': d === state.picked ? 'true' : 'false',
+        'aria-pressed': d === state.picked ? 'true' : 'false', 'aria-current': d === state.today ? 'date' : null,
       }, label, h('span', { class: 'sc' }, l ? String(l) : ''));
       const show = () => {
         tip.replaceChildren(h('div', { class: 'tip-d' }, `${fmtDay(d)} · ${LABELS[l]}${l ? ` (${l}/5)` : ''}`), h('div', null, names || 'No major events listed'));
@@ -382,7 +385,11 @@
       const hide = () => { tip.hidden = true; };
       cell.addEventListener('mouseenter', show);
       cell.addEventListener('mouseleave', hide);
-      cell.addEventListener('click', () => { hide(); state.picked = d; renderHeat(); renderDetail(); });
+      cell.addEventListener('click', () => {
+        hide(); state.picked = d; renderHeat(); renderDetail();
+        // one-column layout (same breakpoint as .cal): the detail sits under the whole grid, so bring it on screen
+        if (oneColumn.matches) $('detail').scrollIntoView({ block: 'nearest', behavior: reduceMotion.matches ? 'auto' : 'smooth' });
+      });
       nodes.push(cell);
     }
     $('heat').replaceChildren(...nodes);
@@ -391,7 +398,7 @@
     const d = state.picked, on = eventsOn(d), l = pressure(on), b = state.brief.get(d);
     $('detail').replaceChildren(
       h('div', { class: 'detail-head' }, h('h3', null, fmtDay(d) + (d === state.today ? ' · today' : '')), level(l)),
-      b && b.headline ? h('p', { class: 'kv' }, b.headline) : null,
+      b && b.headline ? h('p', { class: 'kv' }, b.headline) : '',
       on.length ? h('div', null, on.map(eventItem)) : h('p', { class: 'empty' }, 'No major events listed for this day.'));
   }
 
