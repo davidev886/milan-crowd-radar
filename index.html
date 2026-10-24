@@ -76,7 +76,8 @@
   }
 
   *, *::before, *::after { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
+  html { -webkit-text-size-adjust: 100%; -webkit-tap-highlight-color: color-mix(in srgb, var(--link) 18%, transparent); accent-color: var(--link); }
+  ::selection { background: color-mix(in srgb, var(--link) 28%, transparent); }
   body { margin: 0; background: var(--page); color: var(--ink); font-size: 16px; line-height: 1.5; }
   a { color: var(--link); text-underline-offset: 2px; }
   .wrap { max-width: 72rem; margin-inline: auto; padding: 24px max(var(--gutter), env(safe-area-inset-left)) 48px; display: flex; flex-direction: column; gap: 32px; }
@@ -88,7 +89,6 @@
   .note { margin: 4px 0 14px; color: var(--muted); font-size: 0.85rem; max-width: 70ch; }
   .card { background: var(--surface); border: 1px solid var(--ring); border-radius: var(--radius); padding: 18px; min-width: 0; }
   .muted { color: var(--muted); }
-  .num { font-variant-numeric: tabular-nums; }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
   /* pressure swatch + label (never color alone) */
@@ -159,14 +159,14 @@
   .cell[data-l="5"] { --bg: var(--p5); --fg: var(--p5-fg); }
   .cell .sc { align-self: flex-end; font-weight: 600; }
   .cell .d { white-space: nowrap; }
-  .cell .d small { font-size: 0.62rem; margin-left: 2px; }
+  .cell .d small { font-size: 0.6875rem; margin-left: 2px; }
+  @media (max-width: 400px) { .cell .d small { display: block; margin: 0; line-height: 1.1; } } /* "19 Oct" doesn't fit a 38px cell */
   .cell.past { --bg: var(--surface); --fg: var(--muted); border-color: var(--line); }
   /* today: date in an inverted badge (same contrast as the cell's text), so it never looks like the picked ring */
   .cell.is-today .d { align-self: flex-start; margin-left: -3px; padding: 0 3px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 600; }
   .cell.picked { outline: 2px solid var(--ink); outline-offset: 1px; }
   /* two-tone focus: an inner ring of the card colour shows on every level, the outer ring on the gaps */
   .cell:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; box-shadow: inset 0 0 0 2px var(--surface); }
-  .cell.blank { visibility: hidden; }
   .legend { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 12px; font-size: 0.8rem; color: var(--ink-2); }
   .tip { position: absolute; z-index: 5; pointer-events: none; max-width: 17rem; background: var(--popover); border: 1px solid var(--ring); border-radius: 8px; box-shadow: var(--shadow); padding: 6px 10px; font-size: 0.8rem; line-height: 1.4; }
   .tip-d { color: var(--ink-2); }
@@ -181,6 +181,12 @@
   .chip { appearance: none; font: inherit; font-size: 0.85rem; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--axis); background: transparent; color: var(--ink); cursor: pointer; }
   .chip[aria-pressed="true"] { background: var(--chip-on-bg); color: var(--chip-on-fg); border-color: var(--chip-on-bg); }
   .chip:focus-visible, .search:focus-visible, select:focus-visible { outline: 3px solid var(--link); outline-offset: 1px; }
+  .search::placeholder { color: var(--muted); opacity: 1; }
+  /* touch: 44px targets for chips, the sort menu and the "Include past" label */
+  @media (pointer: coarse) {
+    .chip, .opts select { min-height: 44px; }
+    .opts label { min-height: 44px; display: inline-flex; align-items: center; gap: 6px; }
+  }
   .opts { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; font-size: 0.85rem; color: var(--ink-2); }
   .opts select { font: inherit; padding: 4px 6px; border-radius: 6px; border: 1px solid var(--axis); background: var(--surface); color: var(--ink); }
   .table-wrap { overflow-x: auto; }
@@ -203,8 +209,11 @@
     table.events td.when { color: var(--ink-2); font-size: 0.85rem; }
     table.events td.when .muted { display: inline; }
     table.events td.when .muted::before { content: " · "; }
-    table.events td.imp-c, table.events td.where, table.events td.type { display: inline-block; width: auto; margin-right: 14px; }
+    /* venue on its own line, then type + taxi + Linate together */
+    table.events td.imp-c, table.events td.type { display: inline-block; width: auto; margin-right: 14px; }
     table.events td.type::before, table.events td.where::before { content: none; }
+    table.events td.imp-c::before { content: attr(data-label) " "; color: inherit; font-size: inherit; }
+    table.events td.imp-c .meter { display: none; } /* the n/5 text carries it; keeps Taxi and Linate on one line */
     table.events td.where { color: var(--ink-2); }
   }
   .more { margin-top: 14px; }
@@ -214,7 +223,7 @@
   .error + .retry { margin-left: 0; }
 
   footer { color: var(--muted); font-size: 0.85rem; line-height: 1.6; border-top: 1px solid var(--line); padding-top: 18px; }
-  footer p { margin: 0 0 8px; max-width: 75ch; }
+  footer p { margin: 0 0 8px; max-width: 60ch; }
   footer b { color: var(--ink-2); font-weight: 600; }
 
   .skeleton { min-height: 6rem; border-radius: var(--radius); background: linear-gradient(90deg, var(--line), transparent, var(--line)); background-size: 200% 100%; opacity: 0.5; }
@@ -243,7 +252,7 @@
 
   <section aria-labelledby="h-cal" class="card">
     <h2 id="h-cal">Pressure calendar</h2>
-    <p class="note">Tap a day to see what's on. The number in each day is its pressure score; the stronger the colour, the more pressure. Pick Taxi or Linate to see just one.</p>
+    <p class="note">Select a day to see what's on. The number in each day is its pressure score; the stronger the colour, the more pressure. Pick Taxi or Linate to see just one.</p>
     <div id="mode" class="chips mode" role="group" aria-label="Show pressure for">
       <button type="button" class="chip" data-mode="both" aria-pressed="true">Taxi + Linate</button>
       <button type="button" class="chip" data-mode="taxi" aria-pressed="false">Taxi</button>
@@ -492,9 +501,9 @@
     rows = rows.slice().sort((a, b) => (k === 'date' ? 0 : num(b[k]) - num(a[k])) || a.start.localeCompare(b.start) || a.name.localeCompare(b.name));
     const more = $('more'), LIMIT = 15, total = rows.length;
     const narrowed = q || state.cat !== 'All';
-    if (!state.all && !narrowed && total > LIMIT) {
-      rows = rows.slice(0, LIMIT);
-      more.textContent = `Show all ${total} events`;
+    if (!narrowed && total > LIMIT) {
+      if (!state.all) rows = rows.slice(0, LIMIT);
+      more.textContent = state.all ? 'Show fewer' : `Show all ${total} events`;
       more.hidden = false;
     } else more.hidden = true;
     if (!rows.length) { $('rows').replaceChildren(h('tr', null, h('td', { class: 'empty', colspan: '8' }, 'No events match.'))); return; }
@@ -511,7 +520,7 @@
   $('q').addEventListener('input', (ev) => { state.q = ev.target.value.trim(); renderRows(); });
   $('sort').addEventListener('change', (ev) => { state.sort = ev.target.value; renderRows(); });
   $('past').addEventListener('change', (ev) => { state.past = ev.target.checked; renderRows(); });
-  $('more').addEventListener('click', () => { state.all = true; renderRows(); });
+  $('more').addEventListener('click', () => { state.all = !state.all; renderRows(); });
 
   // ---------- load ----------
   // network first; if that fails, the browser's own cached copy (flaky connections, home-screen app)
