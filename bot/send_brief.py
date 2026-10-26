@@ -318,6 +318,11 @@ def should_run(target_hour: int | None, scheduled_utc_hour: int | None, now: dt.
     return (scheduled_utc_hour + offset) % 24 == target_hour
 
 
+def refreshed_today(briefing: dict[str, dict], today: dt.date) -> bool:
+    """briefing.json starts on the routine's run day, so this is True once today's refresh has landed."""
+    return min(briefing, default="") == iso(today)
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--mode", choices=["morning", "evening", "find-chat-id"], default="morning")
@@ -325,6 +330,10 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--date", help="pretend today is YYYY-MM-DD (Milan time)")
     p.add_argument("--target-local-hour", type=int, help="only send if the scheduled run lands on this hour in Milan")
     p.add_argument("--scheduled-utc-hour", type=int, help="the UTC hour of the cron entry that started this run")
+    p.add_argument("--after-push", action="store_true",
+                   help="started by a data push: send only if it is today's refresh and before 10:00 in Milan")
+    p.add_argument("--unless-refreshed", action="store_true",
+                   help="backup run: skip if today's refresh has landed (its push already sent the brief)")
     args = p.parse_args(argv)
 
     now = dt.datetime.now(dt.timezone.utc)
@@ -348,7 +357,16 @@ def main(argv: list[str] | None = None) -> int:
     briefing = {b.get("date"): b for b in load_json("briefing.json") if b.get("date")}
     dashboard = os.environ.get("DASHBOARD_URL", DEFAULT_DASHBOARD).strip()
 
-    build = build_morning if args.mode == "morning" else build_evening
+    # ponytail: no record of what was sent. If the routine pushes after a backup
+    # run has already sent, that day gets two briefs; a sent-log would fix it.
+    if args.after_push and not (refreshed_today(briefing, today) and now.astimezone(TZ).hour < 10):
+        print("Not this morning's refresh (or past 10:00 in Milan); skipping.")
+        return 0
+    if args.unless_refreshed and refreshed_today(briefing, today):
+        print("Today's refresh has landed and its push sent the brief; skipping.")
+        return 0
+
+    build =build_morning if args.mode == "morning" else build_evening
     text = fit(build(today, events, briefing, dashboard))
 
     if args.dry_run:

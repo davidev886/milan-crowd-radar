@@ -10,7 +10,7 @@ phone, Share → Add to Home Screen to open it like an app.
 
 **Telegram bot:** a message every day —
 
-- **07:07 Milan time** — today's brief: pressure score (0–5), where and when taxi
+- **~06:45 Milan time** (right after the morning refresh) — today's brief: pressure score (0–5), where and when taxi
   demand peaks, Linate notes, weather, today's events, tomorrow, and the next 7 days.
 - **19:07 Milan time** — a preview of tomorrow.
 
@@ -19,7 +19,7 @@ phone, Share → Add to Home Screen to open it like an app.
 ```
 Claude's scheduled task (06:40)          this repo                    readers
   researches events & strikes   ──push──▶  data/events.json   ──▶ index.html on GitHub Pages
-  writes the daily brief                   data/briefing.json ──▶ bot/send_brief.py ──▶ Telegram (07:07 / 19:07)
+  writes the daily brief                   data/briefing.json ──▶ bot/send_brief.py ──▶ Telegram (on push / 19:07)
 ```
 
 Each push of new data redeploys the web app automatically. The pressure score
@@ -51,6 +51,8 @@ After that it runs by itself.
 
 - **Preview without sending:** run the workflow with `dry-run`, or locally:
   `python3 bot/send_brief.py --dry-run` (`--mode evening`, `--date 2026-11-08`).
+- **Morning timing:** the brief is sent by the push of `data/briefing.json`;
+  the 07:07 cron lines are only a backup for days the refresh doesn't arrive.
 - **Change the times:** edit the `cron` lines in
   `.github/workflows/telegram-brief.yml` and the matching
   `--target-local-hour` / `--scheduled-utc-hour` values. Each time is listed

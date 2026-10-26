@@ -1,13 +1,17 @@
 name: Telegram brief
 
-# GitHub runs schedules in UTC. Each send is listed twice (summer and winter
-# time); the script only sends from the entry that lands at the right hour in
-# Milan, so you get one message at ~07:07 and one at ~19:07 local time.
-# (Scheduled runs can start a few minutes late when GitHub is busy.)
+# The morning brief goes out when the 06:40 routine pushes data/briefing.json.
+# GitHub's schedule can start hours late, so the morning cron entries are only a
+# backup: they skip once today's data has landed.
+# Schedules are in UTC. Each send is listed twice (summer and winter time); the
+# script only sends from the entry that lands at the right hour in Milan.
 on:
+  push:
+    branches: [main]
+    paths: [data/briefing.json]
   schedule:
-    - cron: "7 5 * * *"    # 07:07 Milan in summer (CEST) - morning brief
-    - cron: "7 6 * * *"    # 07:07 Milan in winter (CET)  - morning brief
+    - cron: "7 5 * * *"    # 07:07 Milan in summer (CEST) - morning backup
+    - cron: "7 6 * * *"    # 07:07 Milan in winter (CET)  - morning backup
     - cron: "7 17 * * *"   # 19:07 Milan in summer - tomorrow preview
     - cron: "7 18 * * *"   # 19:07 Milan in winter - tomorrow preview
   workflow_dispatch:
@@ -44,10 +48,12 @@ jobs:
         run: |
           set -euo pipefail
           if [ -z "${DASHBOARD_URL}" ]; then unset DASHBOARD_URL; fi
-          if [ "$EVENT_NAME" = "schedule" ]; then
+          if [ "$EVENT_NAME" = "push" ]; then
+            python3 bot/send_brief.py --mode morning --after-push
+          elif [ "$EVENT_NAME" = "schedule" ]; then
             case "$SCHEDULE" in
-              "7 5 * * *")  python3 bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 5 ;;
-              "7 6 * * *")  python3 bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 6 ;;
+              "7 5 * * *")  python3 bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 5 --unless-refreshed ;;
+              "7 6 * * *")  python3 bot/send_brief.py --mode morning --target-local-hour 7  --scheduled-utc-hour 6 --unless-refreshed ;;
               "7 17 * * *") python3 bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 17 ;;
               "7 18 * * *") python3 bot/send_brief.py --mode evening --target-local-hour 19 --scheduled-utc-hour 18 ;;
               *) echo "Unknown schedule: $SCHEDULE"; exit 1 ;;

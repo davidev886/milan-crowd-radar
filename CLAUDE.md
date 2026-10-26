@@ -8,7 +8,7 @@ taxi and airport rushes and shares it with friends.
 
 Live outputs:
 - **Web app** — https://davidev886.github.io/milan-crowd-radar/ (GitHub Pages, `main`, root)
-- **Telegram bot** — sends a brief at ~07:07 and a tomorrow preview at ~19:07 Milan time
+- **Telegram bot** — sends a brief right after the morning push (~06:45) and a tomorrow preview at ~19:07 Milan time
 
 This repo is **public**. Never commit tokens, chat ids, Telegram usernames or
 private links. Secrets live only in GitHub Actions secrets.
@@ -32,7 +32,8 @@ cloud routine "Milan crowd radar – morning refresh" (daily 06:40 Europe/Rome)
   ├─▶ updates a private claude.ai dashboard (link is in the routine's prompt)
   └─▶ commits data/events.json + data/briefing.json to main
           ├─▶ GitHub Pages redeploys index.html automatically (~1 min)
-          └─▶ .github/workflows/telegram-brief.yml reads them at 07:07 / 19:07
+          └─▶ .github/workflows/telegram-brief.yml: morning brief on that push
+                (07:07 cron as backup), tomorrow preview at 19:07
                 └─▶ bot/send_brief.py ─▶ Telegram (chats in secret TELEGRAM_CHAT_ID)
 ```
 
@@ -114,6 +115,11 @@ must close on its own line.
   **annotations**, so read them on the run page (or
   `gh api repos/davidev886/milan-crowd-radar/check-runs/<job id>/annotations`)
   rather than digging in logs.
+- **Morning send:** the push of `data/briefing.json` triggers it (`--after-push`:
+  sends only if the file starts today and it's before 10:00 in Milan). The 07:07
+  cron entries are a backup (`--unless-refreshed`): they skip once today's data
+  has landed, and otherwise send yesterday's data. So a late backup never doubles
+  a pushed brief; a backup that fires before a late push does.
 - **Summer/winter time:** GitHub cron is UTC-only, so each send is scheduled
   twice (05:07 + 06:07 UTC, 17:07 + 18:07 UTC) and the script only sends from the
   entry that lands on the right Milan hour (`--target-local-hour`,
@@ -129,7 +135,10 @@ must close on its own line.
 - **Cloud routine** "Milan crowd radar – morning refresh", daily 06:40
   Europe/Rome, runs unattended in the owner's claude.ai account. Its prompt
   holds the research steps, the private dashboard link, and the push to this
-  repo (it only touches `data/events.json` and `data/briefing.json`). Manage it
+  repo (it only touches `data/events.json` and `data/briefing.json`). The push
+  works only because the repo is in the routine's sources
+  (`session_request.config.sources`). Without it the git proxy refuses the push,
+  as it did until 26 Oct 2026. Manage it
   from the CLI with `/schedule list`, `/schedule update`, `/schedule run`, or at
   claude.ai/code/routines. It reads yesterday's data from the dashboard, not
   from this repo.
@@ -158,7 +167,8 @@ must close on its own line.
 - The routine treats its private dashboard as the source of truth, so edits
   made here to `data/` are lost the next morning. Possible fix: make the routine
   read `data/*.json` from this repo instead.
-- GitHub can start scheduled runs a few minutes late.
+- GitHub can start scheduled runs hours late (2–5 h on 24–25 Oct 2026), so the
+  evening preview can arrive late. The morning brief rides the routine's push instead.
 - The "ubuntu-latest will migrate to Ubuntu 26" notice on runs is harmless (the
   workflow uses the runner's own `python3`).
 - Ideas the owner may ask for: Italian version of the page and messages, a
