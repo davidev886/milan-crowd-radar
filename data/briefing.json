@@ -1,58 +1,10 @@
 [
-  {
-    "date": "2026-10-30",
-    "headline": "USB general strike: rail cut until 20:59, taxis listed; ATM and flights protected",
-    "taxi": "Fewer taxis possible all day while the metro runs; Centrale, Garibaldi and Cadorna busy at 06–09 and 18–21, then Friday-evening centre demand.",
-    "linate": "Long-weekend departures and derby fans arriving; flights protected by the 30 Oct–5 Nov franchise.",
-    "weather": "Scattered clouds, dry, 11–17°C"
-  },
-  {
-    "date": "2026-10-31",
-    "headline": "Derby AC Milan – Inter at 20:45 (~75,000) on Halloween night",
-    "taxi": "San Siro 22:45–00:30, then centre nightlife until late: busiest night of the week.",
-    "linate": "Long weekend (All Saints, Sun 1 Nov): Saturday departures and arrivals.",
-    "weather": "Morning fog, then dry, 8–15°C"
-  },
-  {
-    "date": "2026-11-01",
-    "headline": "All Saints' Day (Sunday): quiet city after the derby night",
-    "taxi": "Light demand; station returns in the evening.",
-    "linate": "Evening returns from the long weekend; Bob Dylan fans arrive for Monday.",
-    "weather": "Dry, 9–13°C"
-  },
-  {
-    "date": "2026-11-02",
-    "headline": "Bob Dylan at Unipol Dome Santa Giulia; EICMA exhibitors arrive",
-    "taxi": "Santa Giulia arrivals 19:00–20:30, exits around 23:00.",
-    "linate": "Busy: EICMA trade visitors and exhibitors fly in ahead of Tue 3 Nov press days.",
-    "weather": "Dry, 6–15°C"
-  },
-  {
-    "date": "2026-11-03",
-    "headline": "EICMA press/trade days start at Rho, plus SMAU and Marco Masini",
-    "taxi": "Rho Fiera at 08:30 opening and 18:30 closing; Assago exits around 23:30; rain may add demand.",
-    "linate": "Very busy: international EICMA trade visitors arriving.",
-    "weather": "Chance of rain, 7–14°C"
-  },
-  {
-    "date": "2026-11-04",
-    "headline": "EICMA trade days at Rho plus SMAU at MiCo",
-    "taxi": "Rho Fiera at 08:30 and 18:30; CityLife at closing; hotels and centre in the evening.",
-    "linate": "Very busy: EICMA trade visitors and exhibitors; arrivals ahead of Thursday's public opening.",
-    "weather": "Chance of rain, 9–13°C"
-  },
-  {
-    "date": "2026-11-05",
-    "headline": "EICMA public days open, SIRM radiology congress starts and AC Milan – Ferencváros at 18:45",
-    "taxi": "Rho Fiera all day; San Siro arrivals 17:00–18:45 and exits 20:45–21:30 on the west side.",
-    "linate": "Very busy: radiology delegates, EICMA visitors and Hungarian away fans.",
-    "weather": ""
-  },
-  {
-    "date": "2026-11-06",
-    "headline": "EICMA public day and SIRM congress on a Friday",
-    "taxi": "Rho Fiera all day, heaviest at 18:30 closing; MiCo/CityLife at congress close; centre Friday evening.",
-    "linate": "Busy: SIRM delegates and EICMA visitors; Friday arrivals for the EICMA weekend.",
-    "weather": ""
-  }
+  {"date":"2026-10-31","headline":"Derby AC Milan – Inter at 20:45 (~75,000) on Halloween night","taxi":"San Siro arrivals 18:30–20:30 and exits 22:45–00:30, then centre nightlife until late: busiest night of the week.","linate":"Long weekend (All Saints, Sun 1 Nov): Saturday departures and arrivals, plus away-from-home derby fans.","weather":"Morning fog, then sunny, 8–17°C"},
+  {"date":"2026-11-01","headline":"All Saints' Day (Sunday): quiet city after the derby night","taxi":"Light demand; cemeteries in the morning, station returns in the evening.","linate":"Evening returns from the long weekend; Bob Dylan fans arrive for Monday.","weather":"Mostly cloudy, dry, 9–14°C"},
+  {"date":"2026-11-02","headline":"Bob Dylan at Unipol Dome Santa Giulia; EICMA exhibitors arrive","taxi":"Santa Giulia arrivals 19:00–20:30, exits around 23:00.","linate":"Busy: EICMA trade visitors and exhibitors fly in ahead of Tue 3 Nov press days.","weather":"Mostly sunny, 7–16°C"},
+  {"date":"2026-11-03","headline":"EICMA press/trade days start at Rho, plus SMAU and Marco Masini","taxi":"Rho Fiera at 08:30 opening and 18:30 closing; Assago exits around 23:30.","linate":"Very busy: international EICMA trade visitors arriving.","weather":"Mostly sunny, 8–16°C"},
+  {"date":"2026-11-04","headline":"EICMA trade days at Rho plus SMAU at MiCo","taxi":"Rho Fiera at 08:30 and 18:30; CityLife at closing; hotels and centre in the evening.","linate":"Very busy: EICMA trade visitors and exhibitors; arrivals ahead of Thursday's public opening.","weather":"Mostly cloudy, 9–14°C"},
+  {"date":"2026-11-05","headline":"EICMA public days open, SIRM radiology congress starts and AC Milan – Ferencváros at 18:45","taxi":"Rho Fiera all day; San Siro arrivals 17:00–18:45 and exits 20:45–21:30 on the west side.","linate":"Very busy: radiology delegates, EICMA visitors and Hungarian away fans.","weather":"Mostly cloudy, cooler, 5–13°C"},
+  {"date":"2026-11-06","headline":"EICMA public day and SIRM congress on a Friday","taxi":"Rho Fiera all day, heaviest at 18:30 closing; MiCo/CityLife at congress close; centre Friday evening.","linate":"Busy: SIRM delegates and EICMA visitors; Friday arrivals for the EICMA weekend.","weather":"Sunny, 6–13°C"},
+  {"date":"2026-11-07","headline":"EICMA Saturday at Rho (biggest crowd), SIRM congress and Nayt at Assago","taxi":"Rho Fiera all day, peak at 18:30 closing; Assago exits around 23:30; centre Saturday night.","linate":"Busy: weekend EICMA visitors and SIRM delegates departing.","weather":""}
 ]
