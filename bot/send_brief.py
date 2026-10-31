@@ -70,7 +70,7 @@ def overlap(on: list[dict]) -> bool:
 def pressure(on: list[dict]) -> int:
     """Highest taxi or Linate impact of the day's events, +1 per overlap() (max 5).
 
-    Same rule as the dashboard's pressure calendar.
+    Same rule as the web app's pressure calendar.
     """
     if not on:
         return 0
@@ -156,7 +156,7 @@ def week_block(start: dt.date, events: list[dict], days: int = 7) -> list[str]:
 
 
 def footer(dashboard: str) -> list[str]:
-    return [f'\n<a href="{html.escape(dashboard, quote=True)}">Open the dashboard</a>'] if dashboard else []
+    return [f'\n<a href="{html.escape(dashboard, quote=True)}">Open the web app</a>'] if dashboard else []
 
 
 def build_morning(today: dt.date, events: list[dict], briefing: dict[str, dict], dashboard: str) -> str:
