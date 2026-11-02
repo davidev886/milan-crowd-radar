@@ -19,25 +19,6 @@
   "source": "https://blog.italotreno.com/in-viaggio-per-lavoro/fiere-rho-fiera-milano-nellautunno-2026-eventi-non-perdere/"
  },
  {
-  "id": "inter_fiorentina",
-  "start": "2026-10-25",
-  "end": "2026-10-25",
-  "when": "Sun 25 Oct",
-  "time": "12:30",
-  "name": "Inter – Fiorentina (Serie A)",
-  "venue": "San Siro",
-  "zone": "San Siro (W)",
-  "category": "Football",
-  "crowd": "~70,000",
-  "outside": "Medium",
-  "taxi": 4,
-  "linate": 2,
-  "peak": "14:30 – 15:30",
-  "tip": "Lunchtime kick-off: San Siro/Lotto jammed from ~11:00, exits mid-afternoon; clocks went back 1 h overnight",
-  "status": "Confirmed",
-  "source": "https://www.inter.it/it/notizie/serie-a-2026-27-calendario-anticipi-posticipi-girone-andata"
- },
- {
   "id": "mico_lift_paint",
   "start": "2026-10-28",
   "end": "2026-10-30",
@@ -1100,6 +1081,25 @@
   "tip": "Last day of Artigiano in Fiera: west side busy all afternoon",
   "status": "Confirmed",
   "source": "https://www.inter.it/it/notizie/serie-a-2026-27-calendario-anticipi-posticipi-girone-andata"
+ },
+ {
+  "id": "taxi_strike_20261215",
+  "start": "2026-12-15",
+  "end": "2026-12-15",
+  "when": "Tue 15 Dec",
+  "time": "Whole day",
+  "name": "National taxi strike",
+  "venue": "Citywide (demo in Rome)",
+  "zone": "City-wide",
+  "category": "Strike",
+  "crowd": "Most taxi unions; few or no taxis all day",
+  "outside": "—",
+  "taxi": 5,
+  "linate": 4,
+  "peak": "All day",
+  "tip": "Plan Linate trips by M4 or shuttle; book airport transfers early.",
+  "status": "Announced",
+  "source": "https://www.ilfattoquotidiano.it/2026/10/27/sciopero-taxi-15-dicembre-roma-notizie/8551821/"
  },
  {
   "id": "milan_como",
