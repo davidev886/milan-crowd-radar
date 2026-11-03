@@ -1,24 +1,5 @@
 [
  {
-  "id": "expodetergo",
-  "start": "2026-10-23",
-  "end": "2026-10-26",
-  "when": "Fri 23 – Mon 26 Oct",
-  "time": "Daytime",
-  "name": "EXPOdetergo International (laundry & textile-care trade fair)",
-  "venue": "Fiera Milano Rho",
-  "zone": "Rho (NW)",
-  "category": "Fair",
-  "crowd": "International trade visitors",
-  "outside": "High",
-  "taxi": 2,
-  "linate": 2,
-  "peak": "Fair closing ~18:00",
-  "tip": "B2B crowd: steady rides Rho ↔ hotels and airports",
-  "status": "Confirmed",
-  "source": "https://blog.italotreno.com/in-viaggio-per-lavoro/fiere-rho-fiera-milano-nellautunno-2026-eventi-non-perdere/"
- },
- {
   "id": "mico_lift_paint",
   "start": "2026-10-28",
   "end": "2026-10-30",
