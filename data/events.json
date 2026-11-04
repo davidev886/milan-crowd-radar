@@ -384,7 +384,7 @@
   "start": "2026-11-13",
   "end": "2026-11-13",
   "when": "Fri 13 Nov",
-  "time": "24 h",
+  "time": "08:45–15:00 and 18:00–end of service",
   "name": "ATM strike – metro, bus, tram (AL-COBAS)",
   "venue": "Whole city",
   "zone": "City-wide",
@@ -393,10 +393,10 @@
   "outside": "—",
   "taxi": 5,
   "linate": 4,
-  "peak": "Outside guaranteed bands (usually until 08:45 and 15:00–18:00)",
+  "peak": "08:45–15:00 and from 18:00 (metro runs only before 08:45 and 15:00–18:00)",
   "tip": "M4 to Linate may stop: expect long taxi queues at Linate arrivals",
   "status": "In MIT strike register",
-  "source": "https://www.sicurauto.it/news/traffico-e-viabilita/sciopero-trasporti-novembre-2026-stop-di-bus-treni-e-aerei/"
+  "source": "https://quifinanza.it/info-utili/scioperi/scioperi-novembre-2026/1022157/"
  },
  {
   "id": "blue_20261113",
@@ -574,19 +574,19 @@
   "start": "2026-11-20",
   "end": "2026-11-21",
   "when": "Fri 20 21:00 – Sat 21 20:00",
-  "time": "Rail from 21:00 Fri; local transport all Sat",
-  "name": "Rail strike (CUB/SGB) + local transport on Sat 21",
+  "time": "21:00 Fri – 20:00 Sat",
+  "name": "Rail strike (CUB/SGB), all rail companies",
   "venue": "Whole city",
   "zone": "City-wide",
   "category": "Strike",
   "crowd": "National",
   "outside": "—",
-  "taxi": 4,
+  "taxi": 3,
   "linate": 3,
-  "peak": "Sat 21 all day",
+  "peak": "Sat 21 daytime (regional guaranteed bands may not apply on Saturday)",
   "tip": "Stations (Centrale, Garibaldi) need taxis; some travellers switch to flights",
   "status": "Announced",
-  "source": "https://www.studenti.it/scioperi-novembre-2026-date-orari.html"
+  "source": "https://www.quotidianomotori.com/mobilita-urbana/sciopero-treni-novembre-2026-date-fasce-garantite-rimborso/"
  },
  {
   "id": "enav_national_20261121",
@@ -720,6 +720,25 @@
   "tip": "Away fans fly in on match day (Malpensa, Bergamo, Linate)",
   "status": "Confirmed",
   "source": "https://www.inter.it/it/notizie/serie-a-2026-27-calendario-anticipi-posticipi-girone-andata"
+ },
+ {
+  "id": "paky_20261125",
+  "start": "2026-11-25",
+  "end": "2026-11-25",
+  "when": "Wed 25 Nov",
+  "time": "Evening",
+  "name": "Paky",
+  "venue": "Unipol Forum Assago",
+  "zone": "Assago (SW)",
+  "category": "Concert",
+  "crowd": "~10,000",
+  "outside": "Low",
+  "taxi": 2,
+  "linate": 1,
+  "peak": "Exit ~23:30",
+  "tip": "Same night as Inter – Stuttgart at San Siro",
+  "status": "Confirmed (moved from 29 Jun)",
+  "source": "https://www.jambase.com/show/paky-unipol-forum-20261125?source=ea"
  },
  {
   "id": "siot",
