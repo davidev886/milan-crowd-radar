@@ -1,58 +1,58 @@
 [
  {
-  "date": "2026-11-04",
-  "headline": "Last EICMA trade day at Rho and last SMAU day at MiCo",
-  "taxi": "Rho Fiera at 08:30 and 18:30; CityLife at SMAU close.",
-  "linate": "Very busy: EICMA trade visitors, plus arrivals for Thursday's EICMA public opening and SIRM congress.",
-  "weather": "Cloudy, dry, 10–13°C"
- },
- {
   "date": "2026-11-05",
-  "headline": "EICMA public days open, SIRM radiology congress starts and AC Milan – Ferencváros at 18:45",
-  "taxi": "Rho Fiera all day; San Siro arrivals 17:00–18:45 and exits 20:45–21:30; CityLife at congress close.",
+  "headline": "EICMA public days open at Rho, SIRM radiology congress starts and AC Milan – Ferencváros at 18:45",
+  "taxi": "Rho Fiera all day, peak at 18:30 closing; San Siro arrivals 17:00–18:45 and exits 20:45–21:30; CityLife at congress close.",
   "linate": "Very busy: radiology delegates, EICMA visitors and Hungarian away fans.",
-  "weather": "Cloudy, 9–13°C"
+  "weather": "Partly cloudy, dry, 9–14°C"
  },
  {
   "date": "2026-11-06",
-  "headline": "EICMA public day and SIRM congress on a Friday; easyJet cabin crew strike",
+  "headline": "EICMA public day and SIRM congress on a Friday; easyJet cabin crew strike all day",
   "taxi": "Rho Fiera all day, heaviest at 18:30 closing; CityLife at congress close; centre Friday evening, more if it rains.",
   "linate": "Busy: SIRM delegates and EICMA visitors; easyJet cancellations possible all day (07:00–10:00 and 18:00–21:00 flights protected).",
-  "weather": "Showers possible, 9–12°C"
+  "weather": "Cloudy, 9–11°C"
  },
  {
   "date": "2026-11-07",
   "headline": "EICMA Saturday at Rho (biggest crowd), SIRM congress and Nayt at Assago",
   "taxi": "Rho Fiera all day, peak at 18:30 closing; Assago exits around 23:30; centre Saturday night, more if it rains.",
   "linate": "Busy: weekend EICMA visitors; SIRM delegates starting to leave.",
-  "weather": "Showers possible, 10–12°C"
+  "weather": "Showers possible, 9–12°C"
  },
  {
   "date": "2026-11-08",
   "headline": "Last EICMA and SIRM day plus Inter – Como at 18:00",
   "taxi": "Rho Fiera at 18:30 closing; San Siro arrivals 16:30–18:00 and exits 20:00–21:00.",
   "linate": "Busy evening departures as EICMA and SIRM visitors fly home.",
-  "weather": "Cloudy, 8–13°C"
+  "weather": "Cloudy, 7–13°C"
  },
  {
   "date": "2026-11-09",
   "headline": "Italo rail strike 09:01–16:59 and Pitbull at Unipol Dome Santa Giulia",
   "taxi": "Centrale and Garibaldi stations as Italo passengers switch; Santa Giulia exits around 23:00.",
   "linate": "Some extra demand from travellers dropping Italo trains for flights.",
-  "weather": "Cloudy, 9–12°C"
+  "weather": "Cloudy, 7–13°C"
  },
  {
   "date": "2026-11-10",
   "headline": "Quiet day: no big fair, match or arena show",
-  "taxi": "Normal weekday demand; theatre exits in the centre (Arcimboldi, Teatro Lirico) around 23:00.",
+  "taxi": "Normal weekday demand; theatre exits in the centre around 23:00.",
   "linate": "Normal business traffic.",
   "weather": "Cloudy, 9–11°C"
  },
  {
   "date": "2026-11-11",
-  "headline": "Architect@Work and Forum Retail open, Tokio Hotel at Assago",
-  "taxi": "Assago exits around 23:00; business districts at show closing.",
+  "headline": "Architect@Work and Forum Retail open at MiCo, Tokio Hotel at Assago",
+  "taxi": "CityLife at show closing; Assago exits around 23:00.",
   "linate": "Some extra business arrivals for the trade shows.",
+  "weather": "Cloudy, 9–11°C"
+ },
+ {
+  "date": "2026-11-12",
+  "headline": "Last day of Architect@Work and Forum Retail; quiet evening",
+  "taxi": "CityLife at show closing; otherwise normal weekday demand, more on the eve of Friday's ATM strike.",
+  "linate": "Normal business traffic.",
   "weather": ""
  }
 ]
