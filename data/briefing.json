@@ -1,58 +1,58 @@
 [
   {
-    "date": "2026-11-08",
-    "headline": "Last EICMA and SIRM day plus Inter – Como at 18:00",
-    "taxi": "Rho Fiera at 18:30 closing; San Siro arrivals 16:30–18:00 and exits 20:00–21:00.",
-    "linate": "Busy evening departures as EICMA and SIRM visitors fly home.",
-    "weather": "Sunny spells, dry, 7–13°C"
-  },
-  {
     "date": "2026-11-09",
-    "headline": "Italo rail strike 09:01–16:59 and Pitbull at Unipol Dome Santa Giulia",
-    "taxi": "Centrale and Garibaldi stations as Italo passengers switch; Santa Giulia exits around 23:00.",
-    "linate": "Some extra demand from travellers dropping Italo trains for flights.",
-    "weather": "Light rain with brief sunny spells, 8–14°C"
+    "headline": "Pitbull at Unipol Dome tonight; the Italo strike is off and trains run normally",
+    "taxi": "Santa Giulia arrivals in the evening, exits around 23:00; drizzle adds some demand.",
+    "linate": "Normal business traffic.",
+    "weather": "Overcast with drizzle, 8–10°C"
   },
   {
     "date": "2026-11-10",
     "headline": "Quiet day: no big fair, match or arena show",
-    "taxi": "Normal weekday demand, a bit higher with light rain; theatre exits in the centre around 23:00.",
+    "taxi": "Normal weekday demand, a bit higher in the rain; theatre exits around 23:00.",
     "linate": "Normal business traffic.",
-    "weather": "Light rain with brief sunny spells, 8–14°C"
+    "weather": "Rain with some breaks, 9–11°C"
   },
   {
     "date": "2026-11-11",
     "headline": "Architect@Work and Forum Retail open at MiCo, Tokio Hotel at Assago",
-    "taxi": "CityLife at show closing; Assago exits around 23:00; rain adds demand.",
+    "taxi": "CityLife at show closing; Assago exits around 23:00; drizzle adds demand.",
     "linate": "Some extra business arrivals for the trade shows.",
-    "weather": "Turning wetter, 8–14°C"
+    "weather": "Overcast with drizzle, 10–12°C"
   },
   {
     "date": "2026-11-12",
-    "headline": "Last day of Architect@Work and Forum Retail, in the week's heaviest rain; eve of Friday's ATM strike",
-    "taxi": "High all day with heavy showers; CityLife at show closing; busy evening ahead of the strike.",
+    "headline": "Last day of Architect@Work and Forum Retail in the week's heaviest rain, on the eve of the ATM strike",
+    "taxi": "High demand in the showers; CityLife at show closing; busy evening ahead of Friday's strike.",
     "linate": "Normal business traffic; allow extra time in the rain.",
-    "weather": "Heavy showers, possible thunderstorms, 9–13°C"
+    "weather": "Showers, heavy at times, 10–12°C"
   },
   {
     "date": "2026-11-13",
-    "headline": "ATM strike: metro, bus and tram at risk 08:45–15:00 and after 18:00, with rain; Blue at Assago",
-    "taxi": "Very high all day outside 15:00–18:00; long queues at stations and in the centre; Assago exits around 23:00.",
-    "linate": "Hard to reach by M4 outside the guaranteed bands; allow extra time or book a taxi early.",
-    "weather": "Rain in the morning and from mid-afternoon, 9–13°C"
+    "headline": "ATM strike: metro, bus and tram at risk 08:45–15:00 and after 18:00, with showers; Blue at Assago",
+    "taxi": "Very high all day outside the 15:00–18:00 window; long queues at stations and in the centre; Assago exits around 23:00.",
+    "linate": "M4 at risk outside guaranteed hours; allow extra time or book a taxi early.",
+    "weather": "Showers with some breaks, 11–16°C"
   },
   {
     "date": "2026-11-14",
     "headline": "ISF World Congress opens at MiCo and Blue play a second night at Assago",
-    "taxi": "CityLife at congress close; Assago exits around 23:00; centre Saturday night.",
+    "taxi": "CityLife at congress close; Assago exits around 23:00; centre on Saturday night.",
     "linate": "Busy arrivals of international ISF congress delegates.",
-    "weather": "Drizzle in the morning, clearing later, 8–14°C"
+    "weather": "Rain with some breaks, 9–13°C"
   },
   {
     "date": "2026-11-15",
-    "headline": "ISF World Congress at MiCo and Jungle at Assago",
+    "headline": "ISF World Congress continues at MiCo; Jungle at Assago",
     "taxi": "CityLife at congress close; Assago exits around 23:00.",
     "linate": "ISF delegates arriving and some weekend departures.",
-    "weather": "Some sunshine, 8–14°C"
+    "weather": "Partly cloudy, mostly dry, 7–13°C"
+  },
+  {
+    "date": "2026-11-16",
+    "headline": "ISF World Congress at MiCo and Big Buyer opens",
+    "taxi": "CityLife around congress and fair closing; normal weekday demand elsewhere.",
+    "linate": "Business arrivals and ISF delegates; steady traffic.",
+    "weather": "Cloudy, 5–9°C"
   }
 ]
