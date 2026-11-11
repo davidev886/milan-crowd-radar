@@ -1,58 +1,58 @@
 [
   {
-    "date": "2026-11-10",
-    "headline": "Quiet day: no big fair, match or arena show",
-    "taxi": "Normal weekday demand, a bit higher if the evening rain arrives; theatre exits around 23:00.",
-    "linate": "Normal business traffic.",
-    "weather": "Cloudy with sunny spells, light rain late evening, 9–12°C"
-  },
-  {
     "date": "2026-11-11",
-    "headline": "Architect@Work and Forum Retail open at MiCo, Tokio Hotel at Assago",
-    "taxi": "CityLife at show closing (~19:00); Assago exits around 23:00; rain adds demand.",
-    "linate": "Some extra business arrivals for the trade shows.",
-    "weather": "Overcast with light rain, 9–12°C"
+    "headline": "Taxi drivers' protest in Milan, Architect@Work and Forum Retail at MiCo, Tokio Hotel at Assago",
+    "taxi": "Fewer cabs possible during the protest; CityLife at show closing (~19:00); Assago exits around 23:00; light rain adds demand.",
+    "linate": "Some extra business arrivals for the trade shows; allow time if taxis are scarce.",
+    "weather": "Overcast, light rain late morning and afternoon, 10–12°C"
   },
   {
     "date": "2026-11-12",
     "headline": "Last day of Architect@Work and Forum Retail in the week's heaviest rain, on the eve of the ATM strike",
     "taxi": "High demand in the showers all day; CityLife at closing; busy evening ahead of Friday's strike.",
     "linate": "Normal business traffic; allow extra time in the rain.",
-    "weather": "Heavy showers, possible thunderstorms, 10–13°C"
+    "weather": "Showers all day, possible thunderstorms, 10–12°C"
   },
   {
     "date": "2026-11-13",
-    "headline": "ATM strike: metro, bus and tram at risk 08:45–15:00 and after 18:00, with rain; Blue at Assago",
+    "headline": "ATM strike: metro, bus and tram at risk 08:45–15:00 and after 18:00; Blue at Assago",
     "taxi": "Very high all day outside the 15:00–18:00 window; long queues at stations and in the centre; Assago exits around 23:00.",
     "linate": "M4 at risk outside guaranteed hours; ISF delegates start arriving; book a taxi early.",
-    "weather": "Rain in the morning and evening, dry mid-afternoon, 10–14°C"
+    "weather": "Drizzle, 11–15°C"
   },
   {
     "date": "2026-11-14",
     "headline": "ISF World Congress opens at MiCo and Blue play a second night at Assago",
     "taxi": "CityLife at congress close; Assago exits around 23:00; centre on Saturday night.",
     "linate": "Busy arrivals of international ISF congress delegates.",
-    "weather": "Drizzle in the morning, brighter afternoon, 7–12°C"
+    "weather": "Partly cloudy, dry spell, 9–12°C"
   },
   {
     "date": "2026-11-15",
     "headline": "ISF World Congress continues at MiCo; Jungle at Assago",
-    "taxi": "CityLife at congress close; Assago exits around 23:00.",
+    "taxi": "CityLife at congress close; Assago exits around 23:00; light rain adds demand.",
     "linate": "ISF delegates and Sunday-evening departures.",
-    "weather": "Improving with some sun, 5–11°C"
+    "weather": "Light rain, 6–10°C"
   },
   {
     "date": "2026-11-16",
     "headline": "ISF World Congress at MiCo and Big Buyer opens",
     "taxi": "CityLife around congress and fair closing; normal weekday demand elsewhere.",
     "linate": "Business arrivals and ISF delegates; steady traffic.",
-    "weather": ""
+    "weather": "Clear, 4–11°C"
   },
   {
     "date": "2026-11-17",
     "headline": "SIMEI opens at Rho as ISF Congress closes at MiCo",
     "taxi": "Rho at fair closing (~18:00); CityLife busy with Big Buyer and ISF departures.",
     "linate": "ISF delegates leaving and international SIMEI buyers arriving.",
+    "weather": "Drizzle, 7–10°C"
+  },
+  {
+    "date": "2026-11-18",
+    "headline": "SIMEI at Rho, Big Buyer's last day and World Business Forum opens at MiCo",
+    "taxi": "Rho at ~18:00 closing; CityLife morning arrivals and ~18:00 exits.",
+    "linate": "International SIMEI buyers and World Business Forum attendees arriving.",
     "weather": ""
   }
 ]
