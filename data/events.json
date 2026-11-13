@@ -19,25 +19,6 @@
     "source": "https://www.moto.it/fiere/eicma-2026-tutto-quello-che-dovete-sapere-la-guida-completa-al-visitatore.html"
   },
   {
-    "id": "milan_ferencvaros",
-    "start": "2026-11-05",
-    "end": "2026-11-05",
-    "when": "Thu 5 Nov",
-    "time": "18:45",
-    "name": "AC Milan – Ferencváros (Europa League)",
-    "venue": "San Siro",
-    "zone": "San Siro (W)",
-    "category": "Football",
-    "crowd": "~60,000 incl. away fans",
-    "outside": "Medium",
-    "taxi": 3,
-    "linate": 2,
-    "peak": "20:45 – 22:00",
-    "tip": "Early kick-off clashes with rush hour and EICMA closing",
-    "status": "Confirmed",
-    "source": "https://www.acmilan.com/it/news/articoli/europa-league/2026-08-29/europa-league-2026-27-il-calendario-rossonero"
-  },
-  {
     "id": "sirm",
     "start": "2026-11-05",
     "end": "2026-11-08",
@@ -224,8 +205,8 @@
     "linate": 4,
     "peak": "08:45–15:00 and from 18:00 (metro runs only before 08:45 and 15:00–18:00)",
     "tip": "M4 to Linate may stop: expect long taxi queues at Linate arrivals",
-    "status": "In MIT strike register – confirmed",
-    "source": "https://quifinanza.it/info-utili/scioperi/scioperi-settimana-9-15-novembre-2026/1023353/"
+    "status": "Confirmed – in MIT strike register",
+    "source": "https://www.sicurauto.it/news/traffico-e-viabilita/sciopero-atm-13-novembre-2026-orari-e-fasce-fermo-milano/"
   },
   {
     "id": "blue_20261113",
