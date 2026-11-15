@@ -1,24 +1,17 @@
 [
   {
-    "date": "2026-11-14",
-    "headline": "ISF World Congress opens at MiCo and Blue play a second night at Assago",
-    "taxi": "CityLife at congress close (~18:00); Assago exits around 23:00; centre busy on Saturday night.",
-    "linate": "Busy arrivals of international ISF congress delegates.",
-    "weather": "Cloudy, dry, 9–11°C"
-  },
-  {
     "date": "2026-11-15",
     "headline": "ISF World Congress continues at MiCo; Jungle at Assago tonight",
-    "taxi": "CityLife at congress close; Assago exits around 23:00.",
+    "taxi": "CityLife at congress close (~18:00); Assago exits around 23:00.",
     "linate": "ISF delegates plus Sunday-evening business departures.",
-    "weather": "Overcast, mostly dry, 8–11°C"
+    "weather": "Overcast morning, dry, 8–10°C"
   },
   {
     "date": "2026-11-16",
     "headline": "ISF World Congress at MiCo and Big Buyer opens",
-    "taxi": "CityLife around congress and fair closing (~18:00).",
+    "taxi": "CityLife around congress and fair closing (~18:00); rain may add demand.",
     "linate": "Monday business arrivals and ISF delegates; steady traffic.",
-    "weather": "7–12°C"
+    "weather": "Showers likely, 6–12°C"
   },
   {
     "date": "2026-11-17",
@@ -32,27 +25,34 @@
     "headline": "SIMEI at Rho, Big Buyer's last day and World Business Forum opens at MiCo",
     "taxi": "Rho at ~18:00 closing; CityLife morning arrivals and ~18:00 exits.",
     "linate": "International SIMEI buyers and World Business Forum attendees arriving.",
-    "weather": "7–14°C"
+    "weather": "7–13°C"
   },
   {
     "date": "2026-11-19",
     "headline": "AutoClassica opens at Rho alongside SIMEI; eve of Friday's general strike",
-    "taxi": "Rho at ~18:00 closing; evening demand at Centrale and Garibaldi if rail joins the strike from 21:00.",
+    "taxi": "Rho at ~18:00 closing; evening demand as people avoid Friday's strike.",
     "linate": "Fair visitors arriving; some travellers bringing trips forward ahead of Friday's strike.",
-    "weather": "6–11°C"
+    "weather": "7–12°C"
   },
   {
     "date": "2026-11-20",
-    "headline": "CGIL general strike, with transport coverage still unclear; Muse at Unipol Dome tonight",
-    "taxi": "Expect fewer cars and heavy demand if ATM or taxis join; Santa Giulia exits after Muse (~23:00) will be hard.",
-    "linate": "Possible flight disruption and M4 at risk – check the strike register and plan airport trips early.",
-    "weather": "5–10°C"
+    "headline": "CGIL general strike including metro, bus, tram and rail; Muse at Unipol Dome tonight",
+    "taxi": "Taxis scarce all day with ATM at risk; Santa Giulia exits after Muse (~23:00) will be hard.",
+    "linate": "M4 to Linate at risk – plan airport trips early; rail strike from 21:00 too.",
+    "weather": "6–12°C"
   },
   {
     "date": "2026-11-21",
     "headline": "Muse second night at Unipol Dome, Korn, AutoClassica and a rail strike until 20:00",
     "taxi": "Rho at fair close; Santa Giulia and Assago exits around 23:00; rail strike pushes people to taxis.",
-    "linate": "ENAV air-traffic strike 13:00–17:00 – delays and cancellations likely in the afternoon.",
+    "linate": "ENAV air-traffic strike 13:00–17:00 – afternoon delays and cancellations likely.",
+    "weather": "5–13°C"
+  },
+  {
+    "date": "2026-11-22",
+    "headline": "AC Milan – Frosinone at San Siro, AutoClassica closes, all-day ENAV strike at Malpensa",
+    "taxi": "San Siro exits ~20:00; Rho at fair close.",
+    "linate": "Some Malpensa traffic may shift to Linate; check flights.",
     "weather": ""
   }
 ]
