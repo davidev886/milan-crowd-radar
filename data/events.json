@@ -361,6 +361,25 @@
     "source": "https://www.sicurauto.it/news/traffico-e-viabilita/sciopero-trasporti-novembre-2026-stop-di-bus-treni-e-aerei/"
   },
   {
+    "id": "half_marathon_2026",
+    "start": "2026-11-22",
+    "end": "2026-11-22",
+    "when": "Sun 22 Nov",
+    "time": "08:45 start",
+    "name": "Milano Half Marathon",
+    "venue": "Start Viale Eginardo; expo at Allianz MiCo (20–22 Nov)",
+    "zone": "CityLife (W)",
+    "category": "Culture",
+    "crowd": "Thousands of runners plus supporters",
+    "outside": "Medium",
+    "taxi": 3,
+    "linate": 2,
+    "peak": "Road closures ~08:00–12:00",
+    "tip": "Expect closed roads and detours in the west and centre on Sunday morning",
+    "status": "Confirmed",
+    "source": "https://www.finishers.com/en/event/milano21"
+  },
+  {
     "id": "milan_frosinone",
     "start": "2026-11-22",
     "end": "2026-11-22",
@@ -821,7 +840,7 @@
     "start": "2026-12-15",
     "end": "2026-12-15",
     "when": "Tue 15 Dec",
-    "time": "Whole day",
+    "time": "08:00–22:00",
     "name": "National taxi strike",
     "venue": "Citywide (demo in Rome)",
     "zone": "City-wide",
@@ -830,10 +849,10 @@
     "outside": "—",
     "taxi": 5,
     "linate": 4,
-    "peak": "All day",
+    "peak": "08:00–22:00",
     "tip": "Plan Linate trips by M4 or shuttle; book airport transfers early.",
     "status": "Announced",
-    "source": "https://www.ilfattoquotidiano.it/2026/10/27/sciopero-taxi-15-dicembre-roma-notizie/8551821/"
+    "source": "https://www.quotidianomotori.com/mobilita-urbana/scioperi-novembre-2026-treni-aerei-tpl-calendario/"
   },
   {
     "id": "cremonini_20261216",
@@ -853,6 +872,25 @@
     "tip": "Book a ride home from Assago before the encore; M2 Assago Forum gets crowded.",
     "status": "Confirmed",
     "source": "https://www.songkick.com/concerts/43400101-cesare-cremonini-at-unipol-forum"
+  },
+  {
+    "id": "irama_20261216",
+    "start": "2026-12-16",
+    "end": "2026-12-16",
+    "when": "Wed 16 Dec",
+    "time": "21:00",
+    "name": "Irama",
+    "venue": "Unipol Dome Santa Giulia",
+    "zone": "Santa Giulia (SE)",
+    "category": "Concert",
+    "crowd": "Arena crowd, up to ~16,000",
+    "outside": "Low",
+    "taxi": 3,
+    "linate": 1,
+    "peak": "Exit ~23:30",
+    "tip": "Mostly local fans; Santa Giulia busy after the show",
+    "status": "Confirmed",
+    "source": "https://songkick.com/venues/4638092-unipol-dome"
   },
   {
     "id": "cremonini_20261218",

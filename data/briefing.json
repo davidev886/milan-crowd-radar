@@ -1,58 +1,58 @@
 [
   {
-    "date": "2026-11-17",
-    "headline": "SIMEI opens at Rho as the ISF Congress closes at MiCo",
-    "taxi": "Rho at fair closing (~18:00); CityLife busy with Big Buyer and ISF departures; light rain adds demand.",
-    "linate": "ISF delegates leaving and international SIMEI buyers arriving.",
-    "weather": "Light rain likely, 4–10°C"
-  },
-  {
     "date": "2026-11-18",
     "headline": "SIMEI at Rho, Big Buyer's last day and World Business Forum opens at MiCo",
-    "taxi": "Rho at ~18:00 closing; CityLife morning arrivals and ~18:00 exits.",
+    "taxi": "Rho at ~18:00 closing; CityLife morning arrivals and ~18:00 exits; morning fog slows traffic.",
     "linate": "International SIMEI buyers and World Business Forum attendees arriving.",
-    "weather": "Fog, then cloudy, 6–15°C"
+    "weather": "Morning fog, then hazy sun, 6–14°C"
   },
   {
     "date": "2026-11-19",
     "headline": "AutoClassica opens at Rho alongside SIMEI; World Business Forum closes",
-    "taxi": "Rho at ~18:00 closing; CityLife exits ~18:00; showers may add demand.",
+    "taxi": "Rho at ~18:00 closing; CityLife exits ~18:00; morning rain adds demand.",
     "linate": "Fair visitors arriving; Forum attendees leaving in the evening.",
-    "weather": "Chance of light rain, 6–14°C"
+    "weather": "Light rain in the morning, then sunny spells, 7–13°C"
   },
   {
     "date": "2026-11-20",
-    "headline": "CGIL general strike, but ATM runs normally; Muse at Unipol Dome tonight",
-    "taxi": "Morning detours around the march from Piazza Cadorna; Santa Giulia exits after Muse (~23:00); rail strike from 21:00 pushes late arrivals to taxis.",
-    "linate": "Flights excluded from the strike; normal Friday departures plus fair visitors.",
-    "weather": "Scattered clouds, 4–16°C"
+    "headline": "CGIL general strike but ATM runs normally; Muse at Unipol Dome tonight; rail strike from 21:00",
+    "taxi": "Morning detours around the march from Piazza Cadorna; Santa Giulia exits after Muse (~23:00); late train arrivals switch to taxis after 21:00.",
+    "linate": "Flights excluded from the strike; normal Friday departures plus fair and half-marathon visitors.",
+    "weather": "Scattered clouds, 5–16°C"
   },
   {
     "date": "2026-11-21",
-    "headline": "Muse's second night at Unipol Dome, Korn at Assago, AutoClassica and a rail strike until 20:00",
+    "headline": "Muse's second night, Korn at Assago, AutoClassica, and a rail strike until 20:00",
     "taxi": "Stations short of trains during the day; Rho at fair close; Santa Giulia and Assago exits around 23:00.",
-    "linate": "ENAV strike revoked; weekend arrivals for Muse and AutoClassica, some rail travellers switching to flights.",
-    "weather": "Clear, 4–13°C"
+    "linate": "National ENAV strike revoked; weekend arrivals for Muse, AutoClassica and the half marathon.",
+    "weather": "Clear, 4–16°C"
   },
   {
     "date": "2026-11-22",
-    "headline": "AC Milan – Frosinone at San Siro, AutoClassica closes, all-day ENAV strike at Malpensa",
-    "taxi": "San Siro exits ~20:00; Rho at fair close; rain adds demand.",
-    "linate": "Some Malpensa traffic may shift to Linate; check flights.",
-    "weather": "Light rain likely, 3–9°C"
+    "headline": "Milano Half Marathon in the morning, AC Milan – Frosinone at 18:00, ENAV strike at Malpensa",
+    "taxi": "Road closures in the west and centre ~08:00–12:00; Rho at AutoClassica close; San Siro exits ~20:00; rain adds demand.",
+    "linate": "Some Malpensa traffic may shift to Linate; runners and fair visitors leaving.",
+    "weather": "Light rain, 5–9°C"
   },
   {
     "date": "2026-11-23",
     "headline": "Quiet Monday after a busy weekend",
     "taxi": "Normal weekday demand; no big evening events found.",
     "linate": "Usual Monday business traffic.",
-    "weather": "Fog, 3–10°C"
+    "weather": "Scattered clouds, 3–14°C"
   },
   {
     "date": "2026-11-24",
     "headline": "Il Salone dei Pagamenti opens at MiCo",
     "taxi": "CityLife morning arrivals and ~18:00 exits.",
     "linate": "Payments-industry visitors arriving; usual Tuesday business traffic.",
+    "weather": "Partly cloudy, 3–10°C"
+  },
+  {
+    "date": "2026-11-25",
+    "headline": "Inter – Stuttgart in the Champions League at 21:00, Paky at Assago, two shows at MiCo",
+    "taxi": "CityLife at ~18:00; San Siro exits ~23:00 and Assago exits ~23:00.",
+    "linate": "German away fans and MiCo visitors arriving.",
     "weather": ""
   }
 ]
