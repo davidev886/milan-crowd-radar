@@ -1,14 +1,7 @@
 [
   {
-    "date": "2026-11-19",
-    "headline": "AutoClassica opens at Rho alongside SIMEI; World Business Forum closes",
-    "taxi": "Rho at ~18:00 closing; CityLife exits ~18:00; morning rain adds demand.",
-    "linate": "Fair visitors arriving; Forum attendees leaving in the evening.",
-    "weather": "Showers, mostly morning, 6–12°C"
-  },
-  {
     "date": "2026-11-20",
-    "headline": "CGIL general strike but ATM runs normally; Muse at Unipol Dome tonight; rail strike from 21:00",
+    "headline": "CGIL general strike (ATM, trains and flights excluded); Muse at Unipol Dome tonight; rail strike from 21:00",
     "taxi": "Morning detours around the march from Piazza Cadorna; Santa Giulia exits after Muse (~23:00); late train arrivals switch to taxis after 21:00.",
     "linate": "Flights excluded from the strike; normal Friday departures plus fair and half-marathon visitors.",
     "weather": "Mostly clear, 4–14°C"
@@ -53,6 +46,13 @@
     "headline": "SIOT orthopaedics congress opens and Salone dei Pagamenti closes at MiCo",
     "taxi": "CityLife morning arrivals and ~18:00 exits.",
     "linate": "Orthopaedic surgeons flying in for SIOT; payments visitors leaving.",
+    "weather": ""
+  },
+  {
+    "date": "2026-11-27",
+    "headline": "Milan Games Week opens at Rho while SIOT congress continues at MiCo",
+    "taxi": "Rho at ~19:00 fair close; CityLife ~18:00 exits; Friday-evening demand in the centre.",
+    "linate": "Orthopaedic surgeons at SIOT plus gamers and families arriving for the weekend.",
     "weather": ""
   }
 ]
