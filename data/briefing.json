@@ -1,24 +1,17 @@
 [
   {
-    "date": "2026-11-20",
-    "headline": "CGIL general strike (ATM, trains and flights excluded); Muse at Unipol Dome tonight; rail strike from 21:00",
-    "taxi": "Morning detours around the march from Piazza Cadorna; Santa Giulia exits after Muse (~23:00); late train arrivals switch to taxis after 21:00.",
-    "linate": "Flights excluded from the strike; normal Friday departures plus fair and half-marathon visitors.",
-    "weather": "Mostly clear, 4–14°C"
-  },
-  {
     "date": "2026-11-21",
-    "headline": "Muse's second night, Korn at Assago, AutoClassica, and a rail strike until 20:00",
-    "taxi": "Stations short of trains during the day; Rho at fair close; Santa Giulia and Assago exits around 23:00.",
-    "linate": "National ENAV strike revoked; weekend arrivals for Muse, AutoClassica and the half marathon.",
-    "weather": "Mostly clear, 3–14°C"
+    "headline": "Muse's second night at Unipol Dome, Korn at Assago, AutoClassica at Rho, and a rail strike until 20:00",
+    "taxi": "Stations short of trains until 20:00 (regional trains only 06–09 and 18–21); Rho at fair close; Santa Giulia and Assago exits around 23:00.",
+    "linate": "No air strike at Linate; weekend arrivals for Muse, AutoClassica and the half marathon.",
+    "weather": "Morning fog, sunny afternoon"
   },
   {
     "date": "2026-11-22",
     "headline": "Milano Half Marathon in the morning, AC Milan – Frosinone at 18:00, ENAV strike at Malpensa",
-    "taxi": "Road closures in the west and centre ~08:00–12:00; Rho at AutoClassica close; San Siro exits ~20:00; drizzle adds demand.",
-    "linate": "Some Malpensa traffic may shift to Linate; runners and fair visitors leaving.",
-    "weather": "Drizzle, 7–9°C"
+    "taxi": "Road closures in the west and centre ~08:00–12:00; Rho at AutoClassica close; San Siro exits ~20:00.",
+    "linate": "Malpensa air-traffic strike all day (guaranteed flights 07–10, 18–21) may push some traffic to Linate; runners and fair visitors leaving.",
+    "weather": "Morning fog, then sun"
   },
   {
     "date": "2026-11-23",
@@ -37,7 +30,7 @@
   {
     "date": "2026-11-25",
     "headline": "Inter – Stuttgart in the Champions League at 21:00, Paky at Assago, two shows at MiCo",
-    "taxi": "CityLife at ~18:00; San Siro exits ~23:00 and Assago exits ~23:00.",
+    "taxi": "CityLife at ~18:00; San Siro and Assago exits ~23:00.",
     "linate": "German away fans and MiCo visitors arriving.",
     "weather": ""
   },
@@ -50,9 +43,16 @@
   },
   {
     "date": "2026-11-27",
-    "headline": "Milan Games Week opens at Rho while SIOT congress continues at MiCo",
+    "headline": "Milan Games Week opens at Rho while SIOT continues at MiCo",
     "taxi": "Rho at ~19:00 fair close; CityLife ~18:00 exits; Friday-evening demand in the centre.",
-    "linate": "Orthopaedic surgeons at SIOT plus gamers and families arriving for the weekend.",
+    "linate": "SIOT surgeons plus gamers and families arriving for the weekend.",
+    "weather": ""
+  },
+  {
+    "date": "2026-11-28",
+    "headline": "Inter – Genoa at 20:45, Bryan Adams at Unipol Dome, Games Week and SIOT busy",
+    "taxi": "Rho at fair close ~19:00; San Siro exits ~22:45; Santa Giulia exits ~23:00.",
+    "linate": "SIOT delegates leaving; weekend visitors for Games Week.",
     "weather": ""
   }
 ]
