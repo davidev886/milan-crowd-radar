@@ -1,19 +1,5 @@
 [
   {
-    "date": "2026-11-21",
-    "headline": "Muse's second night at Unipol Dome, Korn at Assago, AutoClassica at Rho, and a rail strike until 20:00",
-    "taxi": "Stations short of trains until 20:00 (regional trains only 06–09 and 18–21); Rho at fair close; Santa Giulia and Assago exits around 23:00.",
-    "linate": "No air strike at Linate; weekend arrivals for Muse, AutoClassica and the half marathon.",
-    "weather": "Morning fog, sunny afternoon"
-  },
-  {
-    "date": "2026-11-22",
-    "headline": "Milano Half Marathon in the morning, AC Milan – Frosinone at 18:00, ENAV strike at Malpensa",
-    "taxi": "Road closures in the west and centre ~08:00–12:00; Rho at AutoClassica close; San Siro exits ~20:00.",
-    "linate": "Malpensa air-traffic strike all day (guaranteed flights 07–10, 18–21) may push some traffic to Linate; runners and fair visitors leaving.",
-    "weather": "Morning fog, then sun"
-  },
-  {
     "date": "2026-11-23",
     "headline": "Quiet Monday after a busy weekend",
     "taxi": "Normal weekday demand; no big evening events found.",
@@ -53,6 +39,20 @@
     "headline": "Inter – Genoa at 20:45, Bryan Adams at Unipol Dome, Games Week and SIOT busy",
     "taxi": "Rho at fair close ~19:00; San Siro exits ~22:45; Santa Giulia exits ~23:00.",
     "linate": "SIOT delegates leaving; weekend visitors for Games Week.",
+    "weather": ""
+  },
+  {
+    "date": "2026-11-29",
+    "headline": "Last day of Milan Games Week at Rho; SIOT has closed",
+    "taxi": "Rho at ~19:00 fair close; normal Sunday evening elsewhere.",
+    "linate": "Weekend visitors and SIOT delegates flying home; Sunday-evening departures busy.",
+    "weather": ""
+  },
+  {
+    "date": "2026-11-30",
+    "headline": "Quiet Monday; no big events found",
+    "taxi": "Normal weekday demand.",
+    "linate": "Usual Monday business traffic.",
     "weather": ""
   }
 ]

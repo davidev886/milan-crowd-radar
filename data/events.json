@@ -1,24 +1,5 @@
 [
   {
-    "id": "blue_20261114",
-    "start": "2026-11-14",
-    "end": "2026-11-14",
-    "when": "Sat 14 Nov",
-    "time": "Evening",
-    "name": "Blue",
-    "venue": "Unipol Forum Assago",
-    "zone": "Assago (SW)",
-    "category": "Concert",
-    "crowd": "~12,000 per night",
-    "outside": "Medium",
-    "taxi": 2,
-    "linate": 1,
-    "peak": "Exit ~23:00",
-    "tip": "Friday show falls on the ATM strike day",
-    "status": "Confirmed",
-    "source": "https://www.parkingmycar.it/blog/calendario-concerti-italia/"
-  },
-  {
     "id": "isf_congress",
     "start": "2026-11-14",
     "end": "2026-11-17",
@@ -36,25 +17,6 @@
     "tip": "World congress: delegates land at Linate and Malpensa on the ATM strike day",
     "status": "Confirmed",
     "source": "https://www.micomilano.it/en/events"
-  },
-  {
-    "id": "jungle_20261115",
-    "start": "2026-11-15",
-    "end": "2026-11-15",
-    "when": "Sun 15 Nov",
-    "time": "21:00",
-    "name": "Jungle",
-    "venue": "Unipol Forum, Assago",
-    "zone": "Assago (SW)",
-    "category": "Concert",
-    "crowd": "Arena show (about 12k)",
-    "outside": "Medium",
-    "taxi": 3,
-    "linate": 1,
-    "peak": "Exits around 23:00",
-    "tip": "Book a ride home from Assago before the encore; M2 Assago Forum gets crowded.",
-    "status": "Confirmed",
-    "source": "https://www.jambase.com/show/jungle-unipol-forum-20261115"
   },
   {
     "id": "big_buyer",
