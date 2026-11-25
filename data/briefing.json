@@ -1,10 +1,58 @@
 [
-  {"date":"2026-11-24","headline":"Il Salone dei Pagamenti opens at MiCo","taxi":"CityLife morning arrivals and ~18:00 exits; rain from evening adds demand.","linate":"Payments-industry visitors arriving; usual Tuesday business traffic.","weather":"Cloudy, light rain from ~20:00, 8–10°C"},
-  {"date":"2026-11-25","headline":"Inter – Stuttgart in the Champions League at 21:00 in heavy rain, plus Paky at Assago and two shows at MiCo","taxi":"CityLife at ~18:00; San Siro and Assago exits ~23:00; all-day rain pushes demand up.","linate":"German away fans and MiCo visitors arriving.","weather":"Rain all day, heavy at times, 7–8°C"},
-  {"date":"2026-11-26","headline":"SIOT orthopaedics congress opens and Salone dei Pagamenti closes at MiCo","taxi":"CityLife morning arrivals and ~18:00 exits; wet morning.","linate":"Orthopaedic surgeons flying in for SIOT; payments visitors leaving.","weather":"Rain, brighter spells later, 6–9°C"},
-  {"date":"2026-11-27","headline":"Milan Games Week opens at Rho while SIOT continues at MiCo","taxi":"Rho at ~19:00 fair close; CityLife ~18:00 exits; Friday-evening demand in the centre.","linate":"SIOT surgeons plus gamers and families arriving for the weekend.","weather":"Cloudy, possible drizzle, 4–10°C"},
-  {"date":"2026-11-28","headline":"Inter – Genoa at 20:45, Bryan Adams at Unipol Dome, Games Week and SIOT busy","taxi":"Rho at fair close ~19:00; San Siro exits ~22:45; Santa Giulia exits ~23:00.","linate":"SIOT delegates leaving; weekend visitors for Games Week.","weather":"Partly cloudy, dry, 4–9°C"},
-  {"date":"2026-11-29","headline":"Last day of Milan Games Week at Rho; SIOT has closed","taxi":"Rho at ~19:00 fair close; normal Sunday evening elsewhere.","linate":"Weekend visitors and SIOT delegates flying home; Sunday-evening departures busy.","weather":"Partly cloudy, dry, 2–8°C"},
-  {"date":"2026-11-30","headline":"Quiet Monday; no big events found","taxi":"Normal weekday demand.","linate":"Usual Monday business traffic.","weather":"Clear and cold, -1–6°C"},
-  {"date":"2026-12-01","headline":"Inter – Genoa in the Coppa Italia at 21:00","taxi":"San Siro exits ~23:00; smaller cup crowd.","linate":"Usual Tuesday business traffic.","weather":""}
+ {
+  "date": "2026-11-25",
+  "headline": "Inter – Stuttgart in the Champions League at 21:00 in the rain, plus Paky at Assago and two shows at MiCo",
+  "taxi": "CityLife at ~18:00; San Siro and Assago exits ~23:00; rain from late afternoon pushes demand up.",
+  "linate": "German away fans and MiCo visitors arriving.",
+  "weather": "Rain, heavier from ~17:00, 6–9°C"
+ },
+ {
+  "date": "2026-11-26",
+  "headline": "SIOT orthopaedics congress opens and Salone dei Pagamenti closes at MiCo",
+  "taxi": "CityLife morning arrivals and ~18:00 exits; wet day.",
+  "linate": "Orthopaedic surgeons flying in for SIOT; payments visitors leaving.",
+  "weather": "Rain, 4–10°C"
+ },
+ {
+  "date": "2026-11-27",
+  "headline": "Milan Games Week opens at Rho while SIOT continues at MiCo",
+  "taxi": "Rho at ~19:00 fair close; CityLife ~18:00 exits; Friday-evening demand in the centre.",
+  "linate": "SIOT surgeons plus gamers and families arriving for the weekend.",
+  "weather": "Cloudy, a little drizzle, 3–9°C"
+ },
+ {
+  "date": "2026-11-28",
+  "headline": "Inter – Genoa at 20:45, Bryan Adams at Unipol Dome, Games Week and SIOT busy",
+  "taxi": "Rho at fair close ~19:00; San Siro exits ~22:45; Santa Giulia exits ~23:00.",
+  "linate": "SIOT delegates leaving; weekend visitors for Games Week.",
+  "weather": "Clear, 3–9°C"
+ },
+ {
+  "date": "2026-11-29",
+  "headline": "Last day of Milan Games Week at Rho; SIOT has closed",
+  "taxi": "Rho at ~19:00 fair close; normal Sunday evening elsewhere.",
+  "linate": "Weekend visitors flying home; Sunday-evening departures busy.",
+  "weather": "Clear, 1–11°C"
+ },
+ {
+  "date": "2026-11-30",
+  "headline": "Quiet Monday; no big events found",
+  "taxi": "Normal weekday demand.",
+  "linate": "Usual Monday business traffic.",
+  "weather": "Few clouds, cold, 0–7°C"
+ },
+ {
+  "date": "2026-12-01",
+  "headline": "Inter – Genoa in the Coppa Italia at 21:00",
+  "taxi": "San Siro exits ~23:00; smaller cup crowd.",
+  "linate": "Usual Tuesday business traffic.",
+  "weather": ""
+ },
+ {
+  "date": "2026-12-02",
+  "headline": "Quiet Wednesday before the EACVI congress and Friday's general strike",
+  "taxi": "Normal weekday demand.",
+  "linate": "First EACVI cardiology delegates may start arriving in the evening.",
+  "weather": ""
+ }
 ]
