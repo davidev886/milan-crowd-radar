@@ -1,14 +1,7 @@
 [
  {
-  "date": "2026-11-25",
-  "headline": "Inter – Stuttgart in the Champions League at 21:00 in the rain, plus Paky at Assago and two shows at MiCo",
-  "taxi": "CityLife at ~18:00; San Siro and Assago exits ~23:00; rain from late afternoon pushes demand up.",
-  "linate": "German away fans and MiCo visitors arriving.",
-  "weather": "Rain, heavier from ~17:00, 6–9°C"
- },
- {
   "date": "2026-11-26",
-  "headline": "SIOT orthopaedics congress opens and Salone dei Pagamenti closes at MiCo",
+  "headline": "SIOT orthopaedics congress opens at MiCo as the Salone dei Pagamenti closes",
   "taxi": "CityLife morning arrivals and ~18:00 exits; wet day.",
   "linate": "Orthopaedic surgeons flying in for SIOT; payments visitors leaving.",
   "weather": "Rain, 4–10°C"
@@ -53,6 +46,13 @@
   "headline": "Quiet Wednesday before the EACVI congress and Friday's general strike",
   "taxi": "Normal weekday demand.",
   "linate": "First EACVI cardiology delegates may start arriving in the evening.",
+  "weather": ""
+ },
+ {
+  "date": "2026-12-03",
+  "headline": "EACVI cardiology congress opens at MiCo; rail strike starts at 21:00 ahead of Friday's general strike",
+  "taxi": "CityLife morning arrivals and ~18:00 exits; station ranks busy from ~20:00 as people beat the 21:00 rail stop.",
+  "linate": "International cardiology delegates arriving; some travellers bringing trips forward before Friday's strike.",
   "weather": ""
  }
 ]
