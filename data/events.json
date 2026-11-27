@@ -19,25 +19,6 @@
   "source": "https://blog.italotreno.com/in-viaggio-per-lavoro/fiere-rho-fiera-milano-nellautunno-2026-eventi-non-perdere/"
  },
  {
-  "id": "wbf_mico",
-  "start": "2026-11-18",
-  "end": "2026-11-19",
-  "when": "Wed 18 – Thu 19 Nov",
-  "time": "Daytime",
-  "name": "World Business Forum + Expotraining",
-  "venue": "Allianz MiCo",
-  "zone": "CityLife (W)",
-  "category": "Congress",
-  "crowd": "Business delegates",
-  "outside": "Medium",
-  "taxi": 2,
-  "linate": 3,
-  "peak": "Morning arrivals; exits ~18:00",
-  "tip": "Managers flying in for the day: Linate ↔ CityLife",
-  "status": "Confirmed",
-  "source": "https://www.micomilano.it/en/events"
- },
- {
   "id": "autoclassica",
   "start": "2026-11-19",
   "end": "2026-11-22",
