@@ -1,21 +1,14 @@
 [
  {
-  "date": "2026-11-27",
-  "headline": "Milan Games Week opens at Rho while the SIOT orthopaedics congress continues at MiCo",
-  "taxi": "Rho at ~19:00 fair close; CityLife ~18:00 exits; Friday-evening demand in the centre.",
-  "linate": "SIOT surgeons plus gamers and families arriving for the weekend.",
-  "weather": "Cloudy, chance of drizzle, 3–9°C"
- },
- {
   "date": "2026-11-28",
-  "headline": "Inter – Genoa at 20:45, Bryan Adams at Unipol Dome, Games Week and SIOT busy",
+  "headline": "Inter – Genoa at 20:45, Bryan Adams at Unipol Dome, Games Week at Rho and the last day of SIOT",
   "taxi": "Rho at fair close ~19:00; San Siro exits ~22:45; Santa Giulia exits ~23:00.",
   "linate": "SIOT delegates leaving; weekend visitors arriving for Games Week.",
   "weather": "Sunny spells, cold, 2–9°C"
  },
  {
   "date": "2026-11-29",
-  "headline": "Last day of Milan Games Week at Rho; SIOT has closed",
+  "headline": "Last day of Milan Games Week at Rho",
   "taxi": "Rho at ~19:00 fair close; normal Sunday evening elsewhere.",
   "linate": "Weekend visitors flying home; Sunday-evening departures busy.",
   "weather": "Clear and cold, 0–9°C"
@@ -53,6 +46,13 @@
   "headline": "General strike (CUB, SGB, SI Cobas and others) across sectors, with EACVI at MiCo",
   "taxi": "Expect more taxi demand all day if ATM and trains run reduced; check guaranteed time bands.",
   "linate": "Possible disruption to flights and M4 to Linate; EACVI delegates still arriving.",
+  "weather": ""
+ },
+ {
+  "date": "2026-12-05",
+  "headline": "Artigiano in Fiera opens at Rho as the Sant'Ambrogio long weekend starts; Shiva at Unipol Dome",
+  "taxi": "Rho all day and at late-evening close; Santa Giulia exits ~23:00; CityLife EACVI exits.",
+  "linate": "Long-weekend arrivals and EACVI delegates leaving; busy all day.",
   "weather": ""
  }
 ]
